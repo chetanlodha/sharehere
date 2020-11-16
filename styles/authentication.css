@@ -1,0 +1,20 @@
+/* primary: 6179B7 */
+/* primary-rgb: rgb(97, 121, 183, 1) */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    min-height: 100vh;
+}
+
+.container .authentication img{
+    object-fit: contain;
+}
+
+.container .authentication p span{
+    color: #6179B7;
+}
