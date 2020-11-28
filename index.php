@@ -1,3 +1,11 @@
+<?php
+session_start();
+if(!isset($_SESSION["sess_user"])){
+ header("Location: login.php");
+}
+else
+{    
+?>
 <!doctype html>
 <html lang="en">
 
@@ -52,7 +60,7 @@
           <div class="ml-2">
             <h5 class="mb-0 font-weight-bold">Chetan Lodha</h5>
             <span><small>chetan.lodha23@gmail.com</small></span>
-            <a href="/login.html">
+            <a href="logout.php">
               <button class="btn btn-sm btn-light mt-2">Logout</Button>
             </a>
           </div>
@@ -102,7 +110,7 @@
               <h5 class="mb-0">Chetan Lodha</h5>
               <span><small>chetan.lodha23@gmail.com</small></span>
             </div>
-            <a href="/login.html">
+            <a href="logout.php">
               <button class="btn btn-sm btn-light ml-2">Logout</Button>
             </a>
           </div>
@@ -124,3 +132,4 @@
 </body>
 
 </html>
+<?php } ?>
