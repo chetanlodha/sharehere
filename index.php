@@ -21,11 +21,13 @@ if (!isset($_SESSION["sess_user"])) {
   <body onresize="onResize()">
     <div class="wrapper d-flex flex-md-row flex-column">
 
-    <?php include('components/navbar.php'); ?>
+      <?php include('components/navbar.php'); ?>
 
-      <div class="main d-flex justify-content-center align-items-center">
+      <div class="main d-flex flex-column justify-content-center align-items-center w-100">
         <h2>asdasd</h2>
       </div>
+
+      <?php include('components/chatbar.php'); ?>
 
     </div>
 

@@ -1,11 +1,63 @@
-if (window.innerWidth < 768)
-  $(".logoutContainer").toggleClass("visible").toggleClass("hidden");
+// let prev = 0;
+let nav = $("nav");
+let logoutContainer = $(".logoutContainer");
+let mobileBreakPoint = 767;
 
-function onResize() {
-  if (window.innerWidth > 768 && $(".logoutContainer").hasClass("hidden"))
-    $(".logoutContainer").toggleClass("visible").toggleClass("hidden");
+const getDimensions = () => {
+  return {
+    navbar: {
+      width: nav.outerWidth(),
+      height: nav.outerHeight(),
+    },
+    chatbarWidth: $(".chatbar").outerWidth(),
+  };
+};
+
+const setDimensions = (isMobile) => {
+  $(".main").css(
+    isMobile
+      ? {
+        "padding": "0 20px 20px 20px",
+        "padding-top": getDimensions().navbar.height + 10,
+      }
+      : {
+        "padding-top": "20px",
+        "padding-bottom": "20px",
+        "padding-left": getDimensions().navbar.width,
+        "padding-right": getDimensions().chatbarWidth,
+      }
+  );
+};
+
+// const setNavbarScrollListener = () => {
+//   $(window).on("scroll", () => {
+//     let scrollTop = $(window).scrollTop();
+//     nav.toggleClass("hidden", scrollTop > prev);
+//     prev = scrollTop;
+//   });
+// };
+
+const onResize = () => {
+  if (window.innerWidth > mobileBreakPoint) {
+    if (logoutContainer.hasClass("hidden"))
+      logoutContainer.toggleClass("visible").toggleClass("hidden");
+    // nav.off(); //Remove scroll event listener as it is not required in desktop mode
+    setDimensions(false);
+  } else {
+    if (logoutContainer.hasClass("visible"))
+      logoutContainer.removeClass("visible").addClass("hidden");
+    setDimensions(true);
+  }
 }
 
+if (window.innerWidth < mobileBreakPoint) {
+  setDimensions(true);
+  setNavbarScrollListener();
+} else {
+  logoutContainer.toggleClass("visible").toggleClass("hidden");
+  setDimensions(false)
+};
+
 $("#toggleLogoutContainer").on("click", () =>
-  $(".logoutContainer").toggleClass("visible").toggleClass("hidden")
+  logoutContainer.toggleClass("visible").toggleClass("hidden")
 );

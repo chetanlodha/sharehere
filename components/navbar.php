@@ -32,7 +32,7 @@
             </a>
         </ul>
         <div
-            class="logoutContainer visible d-flex flex-row justify-content-center mt-4 mb-3 mb-md-3 mt-md-0 order-2 order-md-2">
+            class="logoutContainer hidden d-flex flex-row justify-content-center mt-4 mb-3 mb-md-3 mt-md-0 order-2 order-md-2">
             <img class="profile-icon d-none d-md-block" src="assets/user/profileImage.jpeg" alt="User profile" />
             <div class="ml-2 d-flex flex-row flex-md-column justify-content-center">
                 <div>

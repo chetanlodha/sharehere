@@ -13,6 +13,23 @@
   font-family: "Poppins", sans-serif;
 }
 
+@media (max-width: 767px) {
+  .wrapper nav {
+    right: 0;
+    bottom: unset !important;
+    min-height: unset !important;
+    border-radius: 0 0px 15px 15px !important;
+  }
+
+  .nav-items a:not(:first-child) {
+    margin-left: 10px;
+  }
+
+  .chatbar {
+    max-width: 200px !important;
+  }
+}
+
 body {
   background-color: #f5f5f5;
   min-height: 100vh;
@@ -22,31 +39,15 @@ body {
 /*************** NAVBAR ****************/
 /***************************************/
 
-@media (max-width: 767px) {
-  .wrapper nav {
-    min-height: unset !important;
-    border-radius: 0 0px 15px 15px !important;
-  }
-
-  .nav-items a:not(:first-child) {
-    margin-left: 10px;
-  }
-}
-
 .wrapper nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
   flex: 0.2;
   min-height: 100vh;
-  background-color: #f5f5f5;
-}
-
-.wrapper nav {
   background-color: white;
   border-radius: 0 15px 15px 0;
-}
-
-.wrapper .main {
-  flex: 0.8;
-  background-color: #f5f5f5;
 }
 
 .nav-items {
@@ -80,6 +81,7 @@ body {
 }
 
 .logoutContainer {
+  max-height: 100px;
   transition: 0.3s ease;
 }
 
@@ -87,7 +89,6 @@ body {
   opacity: 1;
   visibility: visible;
   transform: translate(0);
-  max-height: 100px;
 }
 
 .logoutContainer.hidden {
