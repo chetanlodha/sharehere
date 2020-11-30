@@ -35,6 +35,10 @@ body {
   min-height: 100vh;
 }
 
+.search, .profile, .notifications {
+  display: none;
+}
+
 /***************************************/
 /*************** NAVBAR ****************/
 /***************************************/
@@ -60,6 +64,7 @@ body {
   width: fit-content;
   background-color: #f5f5f5;
   padding: 15px 20px;
+  cursor: pointer;
 }
 
 .nav-item img {
@@ -195,11 +200,37 @@ button:focus {
 /*********** COMMON STYLES *************/
 /***************************************/
 
+textarea{
+  resize: none;
+}
+
+.icons{
+  height: 25px !important;
+  width: 25px !important;
+  cursor: pointer;
+}
+
+.shadow-light{
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.1) !important;
+}
+
 .profile-icon {
   height: 40px;
   width: 40px;
   object-fit: cover;
   border-radius: 50%;
+}
+
+.bg-grey{
+  background-color: #f5f5f5;
+}
+
+.object-fit-contain{
+  object-fit: contain;
+}
+
+.object-fit-cover{
+  object-fit: cover;
 }
 
 /* Small devices (mobiles, 576px and up) */

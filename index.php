@@ -23,8 +23,21 @@ if (!isset($_SESSION["sess_user"])) {
 
       <?php include('components/navbar.php'); ?>
 
-      <div class="main d-flex flex-column justify-content-center align-items-center w-100">
-        <h2>asdasd</h2>
+      <div class="main d-flex flex-column justify-content-center w-100">
+
+        <section class="home">
+          <?php include('components/home.php') ?>
+        </section>
+        <section class="search">
+          <?php include('components/search.php') ?>
+        </section>
+        <section class="profile">
+          <?php include('components/profile.php') ?>
+        </section>
+        <section class="notifications">
+          <?php include('components/notifications.php') ?>
+        </section>
+
       </div>
 
       <?php include('components/chatbar.php'); ?>
