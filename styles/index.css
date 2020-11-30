@@ -30,4 +30,13 @@
   object-fit: contain;
 }
 
+/************************************************/
+/*************** CREATE POST FORM ***************/
+/************************************************/
+
+.create-post-actions div button, .create-post-actions div input{
+  left: 0;
+  z-index: 10;
+  opacity: 0;
+}
 
