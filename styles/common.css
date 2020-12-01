@@ -52,6 +52,7 @@ body {
   min-height: 100vh;
   background-color: white;
   border-radius: 0 15px 15px 0;
+  z-index: 100;
 }
 
 .nav-items {
