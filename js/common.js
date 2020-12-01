@@ -17,7 +17,7 @@ const setDimensions = (isMobile) => {
   $(".main").css(
     isMobile
       ? {
-        "padding": "0 20px 20px 20px",
+        "padding": "0 10px 20px 10px",
         "padding-top": getDimensions().navbar.height + 10,
       }
       : {

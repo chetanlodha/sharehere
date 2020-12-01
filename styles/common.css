@@ -28,6 +28,10 @@
   .chatbar {
     max-width: 200px !important;
   }
+
+  .post:not(:first-child){
+    margin-top: 10px !important;
+  }
 }
 
 body {
