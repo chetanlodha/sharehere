@@ -1,8 +1,8 @@
 <?php
-require_once '../conn.php';
+require_once 'conn.php';
 if(isset($_POST['like']))
 {
-	if($_POST['like']==true)
+	if($_POST['like']== 0)
 	{
 		$like_id = mysqli_real_escape_string($link, $_SESSION['user_id']);
 		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
@@ -22,7 +22,7 @@ if(isset($_POST['like']))
 			echo json_encode($data);
 		}
 	}
-	else
+	elseif($_POST['like']== 1)
 	{
 		$like_id = mysqli_real_escape_string($link, $_SESSION['user_id']);
 		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
@@ -38,6 +38,32 @@ if(isset($_POST['like']))
 			$data['error'] = $link -> error;
 			echo json_encode($data);
 		}
+	}
+	elseif($_POST['like']== 2)
+    {
+		$data = array(array());
+		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
+		$query =  "SELECT * FROM `likes` WHERE `post_id` = '$post_id' ORDER BY date_created";
+		if($result = mysqli_query($link, $query))
+		{  
+			$i = 0;
+			while($row = $result->fetch_assoc()) {
+				$data[$i]['like_id'] = $row['comment_id'];
+				$data[$i]['date_created'] = $row['date_created'];
+				$i++;
+			}
+			echo json_encode($data);
+		}	
+		else  
+		{  
+			$data['status'] = $result;
+			$data['error'] = $link -> error;
+			echo json_encode($data);
+		}
+	}
+	else
+	{
+	   header('Location: http://index.php');	
 	}
 }	
 else

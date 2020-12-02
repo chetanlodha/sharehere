@@ -1,5 +1,5 @@
 <?php
-require_once '../conn.php';
+require_once 'conn.php';
 if(isset($_POST['comment']))
 {
 	if($_POST['comment']== true)
