@@ -17,6 +17,5 @@
 <section class="latest-posts">
     <h4 class="font-weight-bold m-3">Latest posts</h4>
     <div class="posts-container d-flex flex-column">
-        <!-- <Post name={post.name} date={post.date} body={post.body} likes={post.likes} comments={post.comments} key={idx} /> -->
     </div>
 </section>

@@ -40,3 +40,53 @@
   opacity: 0;
 }
 
+/************************************/
+/*************** POST ***************/
+/************************************/
+
+.post{
+  opacity: 0;
+  transition: 0.3s ease;
+}
+
+.animatePost{
+  opacity: 1;
+  animation: animate 1s ease;
+}
+
+@keyframes animate {
+  from {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.post:not(:first-child) {
+  margin-top: 15px;
+}
+
+.post .current-user div span{
+  font-size: smaller;
+}
+
+.post .header .post-actions{
+  position: absolute;
+  background-color: white;
+  opacity: 0;
+  visibility: hidden;
+  top: 30px;
+  right: 0;
+  transform: translateY(-5px);
+  transition: 0.3s ease;
+}
+
+.post .header .post-actions.visible{
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+

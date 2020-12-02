@@ -1,5 +1,5 @@
-// let prev = 0;
 let nav = $("nav");
+let isHideNavbarOnScrollActive = false;
 let logoutContainer = $(".logoutContainer");
 let mobileBreakPoint = 767;
 
@@ -17,7 +17,7 @@ const setDimensions = (isMobile) => {
   $(".main").css(
     isMobile
       ? {
-        "padding": "0 20px 20px 20px",
+        "padding": "0 10px 20px 10px",
         "padding-top": getDimensions().navbar.height + 10,
       }
       : {
@@ -29,18 +29,23 @@ const setDimensions = (isMobile) => {
   );
 };
 
-// const setNavbarScrollListener = () => {
-//   $(window).on("scroll", () => {
-//     let scrollTop = $(window).scrollTop();
-//     nav.toggleClass("hidden", scrollTop > prev);
-//     prev = scrollTop;
-//   });
-// };
+const setNavbarScrollListener = () => {
+  $(window).on('scroll', function () {
+    var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+    scrollY >= this.lastScroll
+      ? nav.addClass('scrollUp')
+      : nav.delay(400).removeClass('scrollUp')
+
+    this.lastScroll = scrollY;
+  });
+  isHideNavbarOnScrollActive = true;
+};
 
 window.onload = () => {
   if (window.innerWidth < mobileBreakPoint) {
     setDimensions(true);
-    // setNavbarScrollListener();
+    setNavbarScrollListener();
   } else {
     logoutContainer.toggleClass("visible").toggleClass("hidden");
     setDimensions(false)
@@ -72,11 +77,18 @@ const onResize = () => {
   if (window.innerWidth > mobileBreakPoint) {
     if (logoutContainer.hasClass("hidden"))
       logoutContainer.toggleClass("visible").toggleClass("hidden");
-    // nav.off(); //Remove scroll event listener as it is not required in desktop mode
     setDimensions(false);
+    if (isHideNavbarOnScrollActive) {
+      $(window).off();
+      isHideNavbarOnScrollActive = false;
+    }
   } else {
     if (logoutContainer.hasClass("visible"))
       logoutContainer.removeClass("visible").addClass("hidden");
     setDimensions(true);
+    if (!isHideNavbarOnScrollActive) {
+      setNavbarScrollListener();
+      isHideNavbarOnScrollActive = true;
+    }
   }
 }

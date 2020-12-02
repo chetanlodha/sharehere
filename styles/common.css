@@ -28,6 +28,10 @@
   .chatbar {
     max-width: 200px !important;
   }
+
+  .post:not(:first-child){
+    margin-top: 10px !important;
+  }
 }
 
 body {
@@ -43,6 +47,10 @@ body {
 /*************** NAVBAR ****************/
 /***************************************/
 
+nav{
+  transition: 0.3s ease;
+}
+
 .wrapper nav {
   position: fixed;
   top: 0;
@@ -52,6 +60,11 @@ body {
   min-height: 100vh;
   background-color: white;
   border-radius: 0 15px 15px 0;
+  z-index: 100;
+}
+
+.scrollUp{
+  top: -250px !important;
 }
 
 .nav-items {

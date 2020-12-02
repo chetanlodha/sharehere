@@ -1,5 +1,5 @@
 <nav>
-    <div class="navbar flex-column justify-content-between align-items-center h-100 pt-3">
+    <div class="navbar flex-column justify-content-between align-items-center h-100 pt-3 shadow-light">
         <div class="d-flex align-items-center order-1">
             <h3 class="nav-header font-weight-bold">Sharehere</h3>
             <img class="profile-icon ml-3 d-md-none" src="./assets/user/profileImage.jpeg" id="toggleLogoutContainer" alt="User profile" />

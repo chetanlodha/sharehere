@@ -11,6 +11,7 @@ if($result = mysqli_query($link, $query))
 		$i = 0;
 		while($row = $result->fetch_assoc()) {
 			$data[$i]['user_id'] = $row['user_id'];
+			$data[$i]['content'] = $row['content'];
 			$data[$i]['comments'] = $row['comments'];
 			$data[$i]['likes'] = $row['likes'];
 			$data[$i]['last_updated'] = $row['last_updated'];
