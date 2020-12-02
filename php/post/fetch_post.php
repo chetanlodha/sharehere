@@ -31,7 +31,6 @@ if($result = mysqli_query($link, $query))
 		    $i++;
 		}
 	echo json_encode($data);
-	echo count($data);	
 	}	
 	else  
 	{  
