@@ -52,7 +52,12 @@ if($_FILES['image'] || isset($_POST['content'])){
 	{
     	if($result = mysqli_query($link, $query))
     	{  
-	    	$data['status'] = 201;
+		    $data['likes'] = $likes;
+			$data['comments'] = $comments;
+			$data['media'] = $file;
+	    	$data['last_updated'] = $last_updated;
+			$data['content'] = $content;
+			$data['status'] = 201;
      		echo json_encode($data);
 	    }		
 		else  
