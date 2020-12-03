@@ -32,13 +32,24 @@ const getAllPosts = () => {
             let postContainer = $('.posts-container');
             let date;
             let time;
+            let imageClass;
             data = JSON.parse(data);
+            if (!data[0].hasOwnProperty('post_id'))
+                return;
             data.forEach(post => {
+                let images = "";
+                let videos = "";
                 date = post.last_updated.split(' ');
                 time = date[4].split(':');
                 time = `at ${(time[0] > 12) ? time[0] - 12 : time[0]}:${time[1]} ${(time[0] > 12) ? 'pm' : 'am'}`;
                 date = `${date[1]} ${date[2]} ${date[3]} ${time}`;
-                console.log(data)
+                imageClass = (post.media.length > 1) ? "col-md-8 overflow-hidden" : "";
+                post.media.forEach((ele, i) => {
+                    if (/jpg|jpeg|png/.test(ele))
+                        images += `<img class="col-12 ${imageClass} img-fluid px-0" src="./php/post/post/${ele}" data-src="./php/post/post/${ele}">`;
+                    else
+                        videos += `<video class="col-12 ${imageClass} px-0" src="./php/post/post/${ele}" controls controlsList="nodownload" preload="none"></video>`;
+                })
                 newPost = ` <div class="post rounded bg-white px-4 py-4">
                                 <div class="header d-flex flex-row justify-content-between position-relative">
                                     <div class="info d-flex">
@@ -58,8 +69,12 @@ const getAllPosts = () => {
                                         <span>Delete post</span>
                                     </div>
                                 </div>
-                                <div class="body m-2">
-                                    <div className="media">
+                                <div class="body mx-0 mx-md-2 my-2">
+                                    <div class="media">
+                                        ${videos}
+                                        <div class="images d-flex col-12">
+                                            ${images}
+                                        </div>
                                     </div>
                                     <p class="d-inline-block text-truncate text-wrap my-2">
                                         ${post.content}
@@ -79,6 +94,12 @@ const getAllPosts = () => {
                 setTimeout(() => {
                     $(post).addClass('animatePost shadow-light');
                 }, i * 200)
+            })
+            Array.from($('.post')).forEach(post => {
+                if ($(post).find('.media .images img').length > 0)
+                    $(post).find('.images').lightGallery({
+                        download: false
+                    });
             })
         },
         error: function (e) {

@@ -14,6 +14,7 @@ if (!isset($_SESSION["sess_user"])) {
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css">
     <link href="styles/hamburgers.min.css" rel="stylesheet">
     <title>Sharehere | Home</title>
   </head>
@@ -49,6 +50,10 @@ if (!isset($_SESSION["sess_user"])) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
   </body>
 
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-zoom.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-fullscreen.min.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-pager.min.js"></script> -->
   <script src="./js/common.js"></script>
   <script src="./js/api.js"></script>
 

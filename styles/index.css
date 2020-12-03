@@ -90,3 +90,17 @@
   transform: translateY(0);
 }
 
+.post .body .media{
+  display: flex;
+  overflow-x: auto;
+  /* scroll-snap-type: x mandatory; */
+}
+
+/* .post .body .media .images img{
+  scroll-snap-align: start;
+} */
+
+.post .body .media .images img:not(:first-child){
+  margin-left: 10px;
+}
+
