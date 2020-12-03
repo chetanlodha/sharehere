@@ -13,6 +13,8 @@ $("#createPost").on('submit', function (e) {
                 alert('Invalid file!');
             else
                 alert(data);
+            $('.posts-container').empty();
+            getAllPosts();
         },
         error: function (e) {
             alert("Failed to create post!");
