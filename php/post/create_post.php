@@ -20,7 +20,7 @@ if($_FILES['image'] || isset($_POST['content'])){
 		else{
 			$path = getcwd(); 
 			$file = array();
-			for($i=0;$i<$countfiles;$i++){
+			for($i=0;$i<=$countfiles;$i++){
 				$img = $_FILES['image']['name'][$i-1];
 				$tmp = $_FILES['image']['tmp_name'][$i-1];
 				$ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
