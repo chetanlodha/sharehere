@@ -14,6 +14,7 @@ if(isset($_SESSION['sess_id']))
 			$data[$i]['user_id'] = $row['user_id'];
 			$data[$i]['comments'] = $row['comments'];
 			$data[$i]['likes'] = $row['likes'];
+			$data[$i]['content'] = $row['content'];
 			$data[$i]['last_updated'] = $row['last_updated'];
 			$data[$i]['media'] = $row['media'];
 			$data[$i]['post_id'] = $row['post_id'];

@@ -12,6 +12,9 @@ if(isset($_POST['comment']))
 		$query = "INSERT INTO `comments` (`comment_id`, `post_id`,`comment`,`date_created`) VALUES ('$comment_id', '$post_id', '$comment','$date_now')";
 		if($result = mysqli_query($link, $query))
 		{  
+		    $data['name'] = $_SESSION['name']; 
+		    $data['content'] = $comment;
+			$data['date_created'] = $date_now;
 			$data['status'] = 201;
 			echo json_encode($data);
 		}  
