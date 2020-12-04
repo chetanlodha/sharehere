@@ -1,9 +1,9 @@
 <?php
 session_start();
 require_once '../conn.php';
-if(isset($_GET['user_id']))
+if(isset($_GET['id']))
 {
-	$user_id = mysqli_real_escape_string($link, $_GET['user_id']);
+	$user_id = mysqli_real_escape_string($link, base64_decode($_GET['id']));
 	$data = array(array());
 	$data_user = array();
 	$cmd = mysqli_query($link, "SELECT * FROM `users` WHERE id = '$user_id'");

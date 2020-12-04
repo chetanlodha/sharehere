@@ -10,16 +10,16 @@ if($_FILES['image'] || isset($_POST['content'])){
 	$date_created = $date_now;
 	$last_updated = $date_now;
 	$countfiles = count($_FILES['image']['name']);
-	if($_FILES['image'])
+	if(!empty($_FILES['image']['name'][0]))
 	{
+		$file = array();
 		$maxsize = 5242880;
 		if((array_sum($_FILES['image']['size']) >= $maxsize) || ($_FILES["image"]["size"] == 0)) {
-            $data['status'] = 601;
-		    $data['error'] = "File too large. File must be less than 5MB.";
+            $file['status'] = 601;
+		    $file['error'] = "File too large. File must be less than 5MB.";
         }
 		else{
 			$path = getcwd(); 
-			$file = array();
 			for($i=1;$i<=$countfiles;$i++){
 				$img = $_FILES['image']['name'][$i-1];
 				$tmp = $_FILES['image']['tmp_name'][$i-1];
@@ -27,6 +27,7 @@ if($_FILES['image'] || isset($_POST['content'])){
 				$final_image = $post_id."_".$i.'.'.$ext;
 				$file[$i] = $final_image;
 				move_uploaded_file($tmp,"$path/post/$final_image"); 
+				
 			}
 		}	
 	}

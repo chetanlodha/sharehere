@@ -6,7 +6,7 @@ if(isset($_SESSION['sess_id']))
 	$data = array(array());
 	$a = scandir('post/');
 	$user_id = mysqli_real_escape_string($link, $_SESSION['sess_id']);
-	$query = "SELECT * FROM post JOIN friend ON post.user_id = friend.friend_id WHERE friend.f_user_id = '$user_id' order by post.last_updated ";
+	$query = "SELECT * FROM post WHERE `user_id` = '$user_id'";//"SELECT * FROM post JOIN friend ON post.user_id = friend.friend_id WHERE friend.f_user_id = '$user_id' order by post.last_updated DESC";
 	if($result = mysqli_query($link, $query))
 	{  
 		$i = 0;
