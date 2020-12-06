@@ -21,13 +21,14 @@ if(isset($_GET['id']))
     }
 	$data_post = array(array());
 	$dir = scandir('post/');
-	$query = "SELECT * FROM post WHERE user_id = '$user_id' order by last_updated ";
+	$query = "SELECT * FROM post WHERE user_id = '$user_id' ";
 	if($result = mysqli_query($link, $query))
 	{  
 		$i = 0;
 		while($row = $result->fetch_assoc()) {
 			$data_post[$i]['user_id'] = $row['user_id'];
 			$data_post[$i]['comments'] = $row['comments'];
+			$data_post[$i]['content'] = $row['content'];
 			$data_post[$i]['likes'] = $row['likes'];
 			$data_post[$i]['last_updated'] = $row['last_updated'];
 			$data_post[$i]['media'] = $row['media'];
