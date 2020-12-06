@@ -1,5 +1,7 @@
 /***************************************/
+
 /*************** CHATBAR ***************/
+
 /***************************************/
 
 .chatbar {
@@ -17,7 +19,6 @@
   align-items: center;
   padding: 10px 15px;
   border-radius: 15px;
-
 }
 
 .chat-user:not(:first-child) {
@@ -31,25 +32,29 @@
 }
 
 /************************************************/
+
 /*************** CREATE POST FORM ***************/
+
 /************************************************/
 
-.create-post-actions div button, .create-post-actions div input{
+.create-post-actions div button, .create-post-actions div input {
   left: 0;
   z-index: 10;
   opacity: 0;
 }
 
 /************************************/
+
 /*************** POST ***************/
+
 /************************************/
 
-.post{
+.post {
   opacity: 0;
   transition: 0.3s ease;
 }
 
-.animatePost{
+.animatePost {
   opacity: 1;
   animation: animate 1s ease;
 }
@@ -69,11 +74,11 @@
   margin-top: 15px;
 }
 
-.post .current-user div span{
+.post .current-user div span {
   font-size: smaller;
 }
 
-.post .header .post-actions{
+.post .header .post-actions {
   position: absolute;
   background-color: white;
   opacity: 0;
@@ -85,13 +90,13 @@
   z-index: 10;
 }
 
-.post .header .post-actions.visible{
+.post .header .post-actions.visible {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-.post .body .media{
+.post .body .media {
   display: flex;
   overflow-x: auto;
   /* scroll-snap-type: x mandatory; */
@@ -101,7 +106,86 @@
   scroll-snap-align: start;
 } */
 
-.post .body .media .images img:not(:first-child){
+.post .body .media .images img:not(:first-child) {
   margin-left: 10px;
 }
 
+/***********************************************/
+
+/*************** PROFILE-HEADER ****************/
+
+/***********************************************/
+
+.profile-header {
+  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgNDAsNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgxMzUpICI+PHJlY3QgaWQ9InBhdHRlcm4tYmFja2dyb3VuZCIgd2lkdGg9IjQwMCUiIGhlaWdodD0iNDAwJSIgZmlsbD0icmdiYSg5NywgMTIxLCAxODMsMSkiPjwvcmVjdD4gPHBhdGggZmlsbD0icmdiYSgxMjcsIDE1NiwgMjQ1LDEpIiBkPSIKICAgICAgICAgICAgICAgIE0wIDI5IGEgOSAtOSAwIDAgMCA5IC05IGEgMTEgLTExIDAgMCAxIDExIC0xMSB2MiBhIC05IDkgMCAwIDAgLTkgOSBhIC0xMSAxMSAwIDAgMSAtMTEgMTF6CiAgICAgICAgICAgICAgICBNMCA2OSBhIDkgLTkgMCAwIDAgOSAtOSBhIDExIC0xMSAwIDAgMSAxMSAtMTEgdjIgYSAtOSA5IDAgMCAwIC05IDkgYSAtMTEgMTEgMCAwIDEgLTExIDExegogICAgICAgICAgICAgICI+PC9wYXRoPjxwYXRoIGZpbGw9InJnYmEoNjgsIDUxLCAxMjIsMSkiIGQ9Ik0yMCAyOS41IGEgOS41IC05LjUgMCAwIDAgOS41IC05LjUgYSAxMC41IC0xMC41IDAgMCAxIDEwLjUgLTEwLjUgdjEgYSAtOS41IDkuNSAwIDAgMCAtOS41IDkuNSBhIC0xMC41IDEwLjUgMCAwIDEgLTEwLjUgMTAuNXoiPjwvcGF0aD48L3BhdHRlcm4+ICA8L2RlZnM+IDxyZWN0IGZpbGw9InVybCgjcGF0dGVybikiIGhlaWdodD0iMTAwJSIgd2lkdGg9IjEwMCUiPjwvcmVjdD48L3N2Zz4=");
+  /* background:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgNDAsNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgxMzUpICI+PHJlY3QgaWQ9InBhdHRlcm4tYmFja2dyb3VuZCIgd2lkdGg9IjQwMCUiIGhlaWdodD0iNDAwJSIgZmlsbD0icmdiYSg5NywgMTIxLCAxODMsMC4zKSI+PC9yZWN0PiA8cGF0aCBmaWxsPSJyZ2JhKDk3LCAxMjEsIDE4MywxKSIgZD0iCiAgICAgICAgICAgICAgICBNMCAyOSBhIDkgLTkgMCAwIDAgOSAtOSBhIDExIC0xMSAwIDAgMSAxMSAtMTEgdjIgYSAtOSA5IDAgMCAwIC05IDkgYSAtMTEgMTEgMCAwIDEgLTExIDExegogICAgICAgICAgICAgICAgTTAgNjkgYSA5IC05IDAgMCAwIDkgLTkgYSAxMSAtMTEgMCAwIDEgMTEgLTExIHYyIGEgLTkgOSAwIDAgMCAtOSA5IGEgLTExIDExIDAgMCAxIC0xMSAxMXoKICAgICAgICAgICAgICAiPjwvcGF0aD48cGF0aCBmaWxsPSJyZ2JhKDEwMiwgMTI2LCAyMzQsMSkiIGQ9Ik0yMCAyOS41IGEgOS41IC05LjUgMCAwIDAgOS41IC05LjUgYSAxMC41IC0xMC41IDAgMCAxIDEwLjUgLTEwLjUgdjEgYSAtOS41IDkuNSAwIDAgMCAtOS41IDkuNSBhIC0xMC41IDEwLjUgMCAwIDEgLTEwLjUgMTAuNXoiPjwvcGF0aD48L3BhdHRlcm4+ICA8L2RlZnM+IDxyZWN0IGZpbGw9InVybCgjcGF0dGVybikiIGhlaWdodD0iMTAwJSIgd2lkdGg9IjEwMCUiPjwvcmVjdD48L3N2Zz4="); */
+  background-color: dimgray;
+  background-blend-mode: color-dodge;
+  background-size: 500% 500%;
+  animation: background-animation 500s linear infinite;
+}
+
+@keyframes background-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+.profile-image {
+  width: 200px;
+  height: 200px;
+  border: 2px solid white;
+  object-fit: cover;
+}
+
+.profile .row-2 .info span:not(:first-child), .profile .row-2 .actions img:not(:first-child) {
+  margin-left: 10px;
+}
+
+.profile-header div:nth-child(2) div span {
+  color: #000000;
+  font-size: 0.9em;
+  font-weight: 500;
+  border-radius: 15px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.profile-header .about-container {
+  width: 0;
+  height: 0;
+  position: absolute;
+  transform: scale(0);
+  transform-origin: bottom;
+  bottom: 25px;
+  background-color: white;
+  clip-path: circle(25%);
+  transition: 0.7s ease;
+  border-radius: 50%;
+}
+
+.profile-header .about-container.visible {
+  width: 100%;
+  height: 100%;
+  visibility: 1 !important;
+  border-radius: 15px;
+  clip-path: circle(75%);
+  transform: scale(1);
+  bottom: 0 !important;
+  left: 0 !important;
+  top: 0 !important;
+  border-radius: 15px;
+  transform-origin: top;
+  transition: 0.7s ease;
+}
+
+@media (min-width: 768px) and (max-width: 800px) {
+  .profile-header .row-2 div:nth-child(2) {
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center !important;
+  }
+}

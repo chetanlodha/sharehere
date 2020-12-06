@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
+  <defs>
+    <pattern id="pattern" width="40" height="40" viewBox="0 0 40,40" patternUnits="userSpaceOnUse" patternTransform="rotate(135) ">
+      <rect id="pattern-background" width="400%" height="400%" fill="rgba(97, 121, 183,1)"/>
+      <path fill="rgba(127, 156, 245,1)" d="
+                M0 29 a 9 -9 0 0 0 9 -9 a 11 -11 0 0 1 11 -11 v2 a -9 9 0 0 0 -9 9 a -11 11 0 0 1 -11 11z
+                M0 69 a 9 -9 0 0 0 9 -9 a 11 -11 0 0 1 11 -11 v2 a -9 9 0 0 0 -9 9 a -11 11 0 0 1 -11 11z
+              ">
+      
+      <path fill="rgba(68, 51, 122,1)" d="M20 29.5 a 9.5 -9.5 0 0 0 9.5 -9.5 a 10.5 -10.5 0 0 1 10.5 -10.5 v1 a -9.5 9.5 0 0 0 -9.5 9.5 a -10.5 10.5 0 0 1 -10.5 10.5z"/>
+    </pattern>
+  </defs>
+  <rect fill="url(#pattern)" height="100%" width="100%"/>
+</svg>
