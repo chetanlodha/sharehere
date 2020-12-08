@@ -2,7 +2,7 @@
 require_once 'conn.php';
 if(isset($_POST['like']))
 {
-	if($_POST['like']== 0)
+	if($_POST['like']== 'like')
 	{
 		$like_id = mysqli_real_escape_string($link, $_SESSION['user_id']);
 		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
@@ -12,6 +12,9 @@ if(isset($_POST['like']))
 		$query = "INSERT INTO `likes` (`like_id`, `post_id`,`date_like`) VALUES ('$like_id', '$post_id','$date_now')";
 		if($result = mysqli_query($link, $query))
 		{  
+		    
+            $query = "UPDATE `post` SET `likes` = likes+1 WHERE `post_id` = '$post_id'";	
+	        $result = mysqli_query($link, $query);
 			$data['status'] = 201;
 			echo json_encode($data);
 		}  
@@ -22,13 +25,15 @@ if(isset($_POST['like']))
 			echo json_encode($data);
 		}
 	}
-	elseif($_POST['like']== 1)
+	elseif($_POST['like']== 'unlike')
 	{
 		$like_id = mysqli_real_escape_string($link, $_SESSION['user_id']);
 		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
 		$query = "DELETE FROM `likes` WHERE `like_id` = '$like_id' AND `post_id` = '$post_id'";
 		if($result = mysqli_query($link, $query))
 		{  
+		     $query = "UPDATE `post` SET `likes` = likes-1 WHERE `post_id` = '$post_id'";	
+	        $result = mysqli_query($link, $query);
 			$data['status'] = 201;
 			echo json_encode($data);
 		}  
@@ -39,7 +44,7 @@ if(isset($_POST['like']))
 			echo json_encode($data);
 		}
 	}
-	elseif($_POST['like']== 2)
+	elseif($_POST['like']== 'fetch likes')
     {
 		$data = array(array());
 		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);

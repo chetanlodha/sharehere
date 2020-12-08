@@ -8,11 +8,14 @@ if(isset($_POST['action']))
 		$comment_id = mysqli_real_escape_string($link, $_SESSION['sess_id']);
 		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
 		$comment = mysqli_real_escape_string($link, $_POST['content']);
+		$count = mysqli_real_escape_string($link, $_POST['count']);
 		date_default_timezone_set("Asia/Calcutta");
 		$date_now = date("r");
 		$query = "INSERT INTO `comments` (`comment_id`, `post_id`,`comment`,`date_created`) VALUES ('$comment_id', '$post_id', '$comment','$date_now')";
 		if($result = mysqli_query($link, $query))
-		{  
+		{ 
+            $query = "UPDATE `post` SET `comments` = comments+1 WHERE `post_id` = '$post_id'";	
+	        $result = mysqli_query($link, $query);	
 		    $data['name'] = $_SESSION['user_name']; 
 		    $data['content'] = $comment;
 			$data['date_created'] = $date_now;
@@ -59,6 +62,8 @@ if(isset($_POST['action']))
 		$query = "DELETE FROM `comments` WHERE `comment_id` = '$comment_id' AND `post_id` = '$post_id' AND`date_created` = '$date'";
 		if($result = mysqli_query($link, $query))
 		{  
+		    $query = "UPDATE `post` SET `comments` = comments-1 WHERE `post_id` = '$post_id'";	
+	        $result = mysqli_query($link, $query);
 			$data['status'] = 201;
 			echo json_encode($data);
 		}  
