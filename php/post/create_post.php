@@ -85,9 +85,9 @@ if($_POST['post'] == 'create post')
 		echo json_encode($data);
 	}
 }
-else if($_POST['post'] == 'delete post' && isset($_SESSION['post_id']) )
+else if($_POST['post'] == 'delete post' && isset($_POST['post_id']) )
 {
-	$post_id = mysqli_real_escape_string($link, $_SESSION['post_id']);
+	$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
 	$query = "DELETE FROM `post` WHERE `post_id` = '$post_id'";
 	if($result = mysqli_query($link, $query))
 	{  
@@ -101,11 +101,11 @@ else if($_POST['post'] == 'delete post' && isset($_SESSION['post_id']) )
 		echo json_encode($data);
 	}
 }
-else if($_POST['post'] == 'update post' && isset($_SESSION['post_id']))
+else if($_POST['post'] == 'update post' && isset($_POST['post_id']))
 {
    
-	$post_id = mysqli_real_escape_string($link, $_SESSION['post_id']);
-	$content = mysqli_real_escape_string($link, $_SESSION['content'])
+	$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
+	$content = mysqli_real_escape_string($link, $_POST['content'])
 	date_default_timezone_set("Asia/Calcutta");
 	$date_now = date("r");
 	$last_updated = $date_now;
