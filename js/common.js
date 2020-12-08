@@ -155,7 +155,10 @@ const appendPost = (post, page, i) => {
   newPost = ` <div class="post rounded bg-white px-4 py-4" data-postid="${post.post_id}">
                   <div class="header d-flex flex-row justify-content-between position-relative">
                       <div class="info d-flex">
-                          <img class="profile-icon" src="./assets/user/profileImage.jpeg" alt="User profile" />
+                          <!--<img class="profile-icon" src="./assets/user/profileImage.jpeg" alt="User profile" />-->
+                          <div class="bg-grey rounded-circle">
+                            <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                          </div>
                           <div class="current-user ml-2">
                               <div>
                                   <h6 class="mb-0">Chetan Lodha</h6>

@@ -1,11 +1,14 @@
 /* ***************************************************************************************************************/
+
 /* Contains styles common to all the pages and Default style for all elements such as links buttons input fields */
+
 /* ***************************************************************************************************************/
+
 /* primary: 6179B7 */
+
 /* primary-rgb: rgb(97, 121, 183, 1) */
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
-
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +16,7 @@
   font-family: "Poppins", sans-serif;
 }
 
-html{
+html {
   scroll-behavior: smooth;
 }
 
@@ -24,16 +27,13 @@ html{
     min-height: unset !important;
     border-radius: 0 0px 15px 15px !important;
   }
-
   .nav-items a:not(:first-child) {
     margin-left: 10px;
   }
-
   .chatbar {
     max-width: 200px !important;
   }
-
-  .post:not(:first-child){
+  .post:not(:first-child) {
     margin-top: 10px !important;
   }
 }
@@ -48,10 +48,12 @@ body {
 }
 
 /***************************************/
+
 /*************** NAVBAR ****************/
+
 /***************************************/
 
-nav{
+nav {
   transition: 0.3s ease;
 }
 
@@ -67,7 +69,7 @@ nav{
   z-index: 100;
 }
 
-.scrollUp{
+.scrollUp {
   top: -250px !important;
 }
 
@@ -122,7 +124,9 @@ nav{
 }
 
 /***************************************/
+
 /*************** BUTTON ****************/
+
 /***************************************/
 
 button {
@@ -133,15 +137,13 @@ button:focus {
   outline: none;
 }
 
-.btn-primary:hover,
-.btn-light:hover {
+.btn-primary:hover, .btn-light:hover {
   transform: translateY(-2px);
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
   background-color: unset !important;
 }
 
-.btn-primary:focus,
-.btn-light:focus {
+.btn-primary:focus, .btn-light:focus {
   outline: none;
   box-shadow: none;
 }
@@ -171,13 +173,21 @@ button:focus {
 }
 
 .btn-success {
+  background-color: #83F383;
+  color: #559055;
+  border-radius: 15px;
 }
 
 .btn-danger {
+  background-color: #FF0000;
+  color: #C54B4B;
+  border-radius: 15px;
 }
 
 /***************************************/
+
 /**************** INPUT ****************/
+
 /***************************************/
 
 .form-control {
@@ -193,7 +203,9 @@ button:focus {
 }
 
 /***************************************/
+
 /**************** LINK *****************/
+
 /***************************************/
 
 :any-link {
@@ -206,7 +218,9 @@ button:focus {
 }
 
 /***************************************/
+
 /******BOOTSTRAP CLASSES OVERRIDE ******/
+
 /***************************************/
 
 .rounded {
@@ -214,21 +228,23 @@ button:focus {
 }
 
 /***************************************/
+
 /*********** COMMON STYLES *************/
+
 /***************************************/
 
-textarea{
+textarea {
   resize: none;
 }
 
-.icons{
+.icons {
   height: 25px !important;
   width: 25px !important;
   cursor: pointer;
 }
 
-.shadow-light{
-  box-shadow: 0px 5px 15px rgba(0,0,0,0.1) !important;
+.shadow-light {
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1) !important;
 }
 
 .profile-icon {
@@ -238,15 +254,22 @@ textarea{
   border-radius: 50%;
 }
 
-.bg-grey{
-  background-color: #f5f5f5;
-}
-
-.object-fit-contain{
+.profile-icon-placeholder {
+  height: 45px;
+  width: 45px;
+  padding: 10px;
   object-fit: contain;
 }
 
-.object-fit-cover{
+.bg-grey {
+  background-color: #f5f5f5;
+}
+
+.object-fit-contain {
+  object-fit: contain;
+}
+
+.object-fit-cover {
   object-fit: cover;
 }
 

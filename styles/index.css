@@ -182,7 +182,7 @@
   visibility: visible;
 }
 
-.comment.remove{
+.comment.remove {
   transform: scaleY(0);
   max-height: 0;
   padding: 0 !important;
@@ -215,6 +215,28 @@
   100% {
     background-position: 100% 100%;
   }
+}
+
+.profile-image-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border: 2px solid white;
+  background-color: rgb(255, 255, 255, 0.8);
+}
+
+.profile-image-container .icons {
+  position: absolute;
+  bottom: 5px;
+  left: 44%;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: 0.5s ease;
+}
+
+.profile-image-container:hover .icons {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .profile-image {
@@ -250,11 +272,11 @@
   will-change: transform;
 }
 
-.profile-header .about-container *{
+.profile-header .about-container * {
   opacity: 0;
 }
 
-.profile-header .about-container.visible *{
+.profile-header .about-container.visible * {
   opacity: 1;
 }
 
