@@ -1,9 +1,9 @@
 <?php
 session_start();
 require_once '../conn.php';
-if(isset($_POST['comment']))
+if(isset($_POST['action']))
 {
-	if($_POST['comment']== 'create comment')
+	if($_POST['action'] == 'create')
 	{
 		$comment_id = mysqli_real_escape_string($link, $_SESSION['sess_id']);
 		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
@@ -26,7 +26,7 @@ if(isset($_POST['comment']))
 			echo json_encode($data);
 		}
 	}
-	else if($_POST['comment']== 'fetch comment')
+	else if($_POST['action']== 'fetch')
 	{
 	    $post_id = mysqli_real_escape_string($link, $_POST['post_id']);	
 		$query = "SELECT * FROM `comments` WHERE `post_id` = '$post_id'";
@@ -37,7 +37,7 @@ if(isset($_POST['comment']))
 		    while($row = $result->fetch_assoc())
 			{
 				$data[$i]['id'] = $row['comment_id'];
-				$data[$i]['comments'] = $row['content'];
+				$data[$i]['content'] = $row['comment'];
 				$data[$i]['date_created'] = $row['date_created'];
 				$i++;
 		    }
@@ -51,7 +51,7 @@ if(isset($_POST['comment']))
 			echo json_encode($data);
 		}
 	}
-    else if($_POST['comment']== 'delete comment') 
+    else if($_POST['action']== 'delete') 
     {
 		$comment_id = mysqli_real_escape_string($link, $_SESSION['sess_id']);
 		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
@@ -70,7 +70,7 @@ if(isset($_POST['comment']))
 		}
 		
 	}
-	 else if($_POST['comment']== 'update comment') 
+	 else if($_POST['action']== 'update') 
     {
 		$comment_id = mysqli_real_escape_string($link, $_SESSION['sess_id']);
 		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);

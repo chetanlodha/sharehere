@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../conn.php';
-if($_POST['post'] == 'create post')
+if($_POST['action'] == 'create')
 {
 	$data = array();
 	if($_FILES['image'] || isset($_POST['content']))
@@ -28,7 +28,7 @@ if($_POST['post'] == 'create post')
 					$tmp = $_FILES['image']['tmp_name'][$i-1];
 					$ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
 					$final_image = $post_id."_".$i.'.'.$ext;
-					$file[$i] = $final_image;
+					$file[$i-1] = $final_image;
 					move_uploaded_file($tmp,"$path/post/$final_image"); 
 					
 				}
@@ -85,7 +85,7 @@ if($_POST['post'] == 'create post')
 		echo json_encode($data);
 	}
 }
-else if($_POST['post'] == 'delete post' && isset($_POST['post_id']) )
+else if($_POST['action'] == 'delete' && isset($_POST['post_id']) )
 {
 	$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
 	$query = "DELETE FROM `post` WHERE `post_id` = '$post_id'";
@@ -101,11 +101,11 @@ else if($_POST['post'] == 'delete post' && isset($_POST['post_id']) )
 		echo json_encode($data);
 	}
 }
-else if($_POST['post'] == 'update post' && isset($_POST['post_id']))
+else if($_POST['action'] == 'update' && isset($_POST['post_id']))
 {
    
 	$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
-	$content = mysqli_real_escape_string($link, $_POST['content'])
+	$content = mysqli_real_escape_string($link, $_POST['content']);
 	date_default_timezone_set("Asia/Calcutta");
 	$date_now = date("r");
 	$last_updated = $date_now;

@@ -15,7 +15,6 @@ if (!isset($_SESSION["sess_user"])) {
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css">
-    <link href="styles/hamburgers.min.css" rel="stylesheet">
     <title>Sharehere | Home</title>
   </head>
 
