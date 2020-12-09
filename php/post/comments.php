@@ -8,7 +8,6 @@ if(isset($_POST['action']))
 		$comment_id = mysqli_real_escape_string($link, $_SESSION['sess_id']);
 		$post_id = mysqli_real_escape_string($link, $_POST['post_id']);
 		$comment = mysqli_real_escape_string($link, $_POST['content']);
-		$count = mysqli_real_escape_string($link, $_POST['count']);
 		date_default_timezone_set("Asia/Calcutta");
 		$date_now = date("r");
 		$query = "INSERT INTO `comments` (`comment_id`, `post_id`,`comment`,`date_created`) VALUES ('$comment_id', '$post_id', '$comment','$date_now')";
