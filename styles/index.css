@@ -301,3 +301,21 @@
     justify-content: center !important;
   }
 }
+
+/***********************************************/
+
+/**************** NOTIFICATIONS ****************/
+
+/***********************************************/
+
+.notification{
+  min-width: 220px !important;
+}
+
+.notification .info {
+  cursor: pointer;
+}
+
+.notification .actions button{
+  font-size: 0.8em;
+}

@@ -137,15 +137,19 @@ button:focus {
   outline: none;
 }
 
-.btn-primary:hover, .btn-light:hover {
-  transform: translateY(-2px);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-  background-color: unset !important;
+.btn:active {
+  transform: scale(0.9) !important;
 }
 
-.btn-primary:focus, .btn-light:focus {
-  outline: none;
-  box-shadow: none;
+.btn-primary:hover, .btn-light:hover {
+  /* transform: translateY(-2px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); */
+  /* background-color: unset !important; */
+}
+
+.btn-primary:focus, .btn-light:focus, .btn-green:focus, .btn-red:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .btn-primary:hover {
@@ -172,15 +176,15 @@ button:focus {
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.btn-success {
-  background-color: #83F383;
-  color: #559055;
+.btn-green {
+  background-color: rgba(131, 255, 131, 0.3) !important;
+  color: #559055 !important;
   border-radius: 15px;
 }
 
-.btn-danger {
-  background-color: #FF0000;
-  color: #C54B4B;
+.btn-red {
+  background-color: rgba(255, 0, 0, 0.3) !important;
+  color: #C54B4B !important;
   border-radius: 15px;
 }
 
