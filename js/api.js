@@ -86,8 +86,9 @@ const populateProfilePage = () => {
         cache: false,
         success: function (data) {
             data = JSON.parse(data)[0];
+            console.log(data);
             populateProfileHeader(data.profile_data);
-            if (!data.hasOwnProperty('post_id'))
+            if (!data.post[0].hasOwnProperty('post_id'))
                 return;
             console.log(data);
             appendAllPosts(data.post, 'profile');

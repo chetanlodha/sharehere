@@ -1,5 +1,8 @@
 <?php
 session_start();
+if(isset($_SESSION['sess_id']) && isset($_SESSION['sess_user'])){
+  header("Location: index.php");
+}else{
 ?>
 <!doctype html>
 <html lang="en">
@@ -133,5 +136,5 @@ session_start();
         });
     </script>
 </body>
-
 </html>
+<?php } ?>

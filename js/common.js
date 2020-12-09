@@ -155,13 +155,16 @@ const appendPost = (post, page, i) => {
   newPost = ` <div class="post rounded bg-white px-4 py-4" data-postid="${post.post_id}">
                   <div class="header d-flex flex-row justify-content-between position-relative">
                       <div class="info d-flex">
-                          <!--<img class="profile-icon" src="./assets/user/profileImage.jpeg" alt="User profile" />-->
-                          <div class="bg-grey rounded-circle">
-                            <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
-                          </div>
+                          ${(post.profile_picture) ?
+                            `<img class="profile-icon" src="php/post/post/uploads/${post.profile_picture}" alt="User profile">`
+                            :
+                            ` <div class="bg-grey rounded-circle">
+                                <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                              </div>`
+                          }
                           <div class="current-user ml-2">
                               <div>
-                                  <h6 class="mb-0">Chetan Lodha</h6>
+                                  <h6 class="mb-0">${post.name}</h6>
                                   <span class="text-muted">${date}</span>
                               </div>
                           </div>
@@ -290,6 +293,52 @@ const populateProfileHeader = (profile) => {
   }
   $('.profile-header .row-1 h5 strong').text(profile.name);
   $('.profile-header .about-container').css('left', aboutPosition.left).css('top', aboutPosition.top);
+  if (profile.profile_picture) {
+    $('.profile .profile-placeholder-image-container').hide();
+    $('.profile .profile-image').show().attr('src', `php/post/post/uploads/${profile.profile_picture}`);
+  } else {
+    $('.profile .profile-placeholder-image-container').css('display', 'flex');
+    $('.profile .profile-image').hide().attr('src', ` `);
+  }
+
+  //yha lagado k
+  $('.profile-image-container input').on('change', function () {
+    //  console.log('hh');
+    var formdata = new FormData;
+    var name_img = this.files[0].name;
+    var extensions = ["jpg", "png", "jpeg"];
+    var img_exten = name_img.split('.');
+    if (extensions.indexOf(img_exten[1]) !== -1) {
+      //alert('valid extension');
+      // if(this.files[0].size > 20000000){
+      formdata.append("file", this.files[0]);
+      $.ajax({
+        type: 'POST',
+        url: 'api/upload_profile_picture.php',
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        data: formdata,
+        success: function (data) {
+          if (data.status = 201) {
+            if ($('.profile .profile-placeholder-image-container').css('display') == 'flex')
+              $('.profile .profile-placeholder-image-container').hide()
+            $(".profile .profile-image").attr("src", `php/post/post/uploads/${data.image}`);
+            $('.profile .profile-image').show()
+          } else {
+            alert(error);
+          }
+        }
+      });
+      // }else{
+      //   alert('bigger file size');
+      // }
+    } else {
+      alert('Invalid Extension');
+    }
+
+    console.log(img_exten);
+  });
 }
 
 /*******************************************

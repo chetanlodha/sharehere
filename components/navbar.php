@@ -23,7 +23,15 @@
             </li>
         </ul>
         <div class="logoutContainer hidden d-flex flex-row justify-content-center mt-4 mb-3 mb-md-3 mt-md-0 order-2 order-md-2">
-            <img class="profile-icon d-none d-md-block" src="assets/user/profileImage.jpeg" alt="User profile" />
+
+            <?php if (!$_SESSION['profile_picture']) { ?>
+                <div class="bg-grey rounded-circle">
+                    <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                </div>
+            <?php } else { ?>
+                <img class="profile-icon d-none d-md-block" src="php/post/post/uploads/<?php echo  $_SESSION['profile_picture'] ?>" alt="User profile" />
+            <?php } ?>
+
             <div class="ml-2 d-flex flex-row flex-md-column justify-content-center">
                 <div>
                     <h5 class="mb-0 font-weight-bold"><?php echo $_SESSION['user_name'] ?></h5>

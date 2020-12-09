@@ -6,7 +6,13 @@ if(isset($_SESSION['sess_id']))
 	$data = array(array());
 	$a = scandir('post/');
 	$user_id = mysqli_real_escape_string($link, $_SESSION['sess_id']);
-	$query = "SELECT * FROM post WHERE `user_id` = '$user_id'";//"SELECT * FROM post JOIN friend ON post.user_id = friend.friend_id WHERE friend.f_user_id = '$user_id' order by post.last_updated DESC";
+	$query = "SELECT post.* ,users.name ,users.profile_picture
+	FROM post   
+    INNER JOIN users
+	ON post.user_id = users.id
+	INNER JOIN friends
+	ON post.user_id = friends.friend_id
+	WHERE  friends.user_id =  '$user_id'";
 	if($result = mysqli_query($link, $query))
 	{  
 		$i = 0;
@@ -19,6 +25,8 @@ if(isset($_SESSION['sess_id']))
 			$data[$i]['last_updated'] = $row['last_updated'];
 			$data[$i]['media'] = $row['media'];
 			$data[$i]['post_id'] = $row['post_id'];
+			$data[$i]['name'] = $row['name']; 
+			$data[$i]['profile_picture'] = $row['profile_picture'];
 			$j = 0;
 			$data_file = array();
 			foreach ($a as $value) 

@@ -22,6 +22,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
                 $_SESSION['sess_user']=$email;
                 $_SESSION['sess_id']=$row['id'];
                 $_SESSION['user_name'] = $row['name'];
+                $_SESSION['profile_picture'] = $row['profile_picture'];
                 $data['status'] = 201;
                 echo json_encode($data);
 		     

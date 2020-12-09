@@ -13,6 +13,7 @@ if(isset($_GET['id']))
         $data_user['date_of_birth']=$row['date_of_birth'];
 		$data_user['email']=$row['email'];
 		$data_user['name'] = $row['name'];
+		$data_user['profile_picture'] = $row['profile_picture'];
 	}
 	else 
 	{ 
@@ -33,6 +34,8 @@ if(isset($_GET['id']))
 			$data_post[$i]['last_updated'] = $row['last_updated'];
 			$data_post[$i]['media'] = $row['media'];
 			$data_post[$i]['post_id'] = $row['post_id'];
+			$data_post[$i]['name'] = $data_user['name'];
+			$data_post[$i]['profile_picture'] = $data_user['profile_picture'];
 			$j = 0;
 			$data_file = array();
 			foreach ($dir as $value) 

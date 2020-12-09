@@ -1,8 +1,8 @@
 <section class="profile-header d-flex flex-wrap rounded shadow-light p-3 position-relative">
     <div class="row-1 d-flex flex-column justify-content-center align-items-center mx-auto">
         <div class="profile-image-container position-relative">
-            <img class="profile-image rounded-circle shadow m-3" src="assets/user/profileImage.jpeg" alt="User profile image">
-            <div class="profile-placeholder-image-container d-none flex-column justify-content-around align-items-center rounded-circle shadow m-3">
+            <img class="profile-image rounded-circle shadow m-3" alt="User profile image">
+            <div class="profile-placeholder-image-container  flex-column justify-content-around align-items-center rounded-circle shadow m-3">
                 <img class="profile-placeholder-image mb-1 w-50 h-50 border-0" src="assets/icons/profile-user.svg" alt="User profile image">
             </div>
             <img class="icons" src="assets/icons/edit.svg" alt="Add profile picture" onclick="$(this).next().next().click()">
