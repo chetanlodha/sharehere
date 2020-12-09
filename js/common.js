@@ -254,7 +254,6 @@ const appendAllComments = (postId, data) => {
         $(comment).addClass('visible')
       }, i * 100);
     });
-    setUpCommentActions(postId);
   }
 }
 
@@ -270,10 +269,11 @@ const appendComment = (postId, comment) => {
   else
     return;
   $(`.post[data-postid=${postId}] .latest-comments`).append(newComment);
+  setUpCommentActions(postId);
 }
 
 const setUpCommentActions = (postId) => {
-  $(`.post[data-postid=${postId}] .latest-comments .comment img`).on('click', function (e) {
+  $(`.post[data-postid=${postId}] .latest-comments .comment:last-child img`).on('click', function (e) {
     deleteComment(postId, $(this).parent().data('datecreated'), $(this).parent())
   })
 }

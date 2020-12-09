@@ -45,9 +45,8 @@ const getAllPosts = () => {
         cache: false,
         success: function (data) {
             data = JSON.parse(data);
-            if (!data[0].hasOwnProperty('post_id')) {
-                $()
-            }
+            if (!data[0].hasOwnProperty('post_id'))
+                return;
             console.log(data);
             appendAllPosts(data, 'home');
         },
@@ -114,7 +113,8 @@ const createComment = (postId, content) => {
             appendComment(postId, data);
             commentsContainer.scrollTo({ top: commentsContainer.scrollHeight, behavior: "smooth" })
             $(`.post[data-postid=${postId}] .latest-comments .comment:last-child`).addClass('visible');
-            setUpCommentActions(postId);
+            let commentCounter = parseInt($(`.post[data-postid=${postId}] .toggle-comments`).text().split(' ')[0]) + 1;
+            $(`.post[data-postid=${postId}] .toggle-comments`).text(`${commentCounter} comments`);
         },
         error: function (e) {
             alert("Failed to create comment!");
@@ -155,8 +155,9 @@ const deleteComment = (postId, dateCreated, comment) => {
         data: data,
         cache: false,
         success: function (data) {
-            console.log(data);
             comment.addClass('remove');
+            let commentCounter = parseInt($(`.post[data-postid=${postId}] .toggle-comments`).text().split(' ')[0]) - 1;
+            $(`.post[data-postid=${postId}] .toggle-comments`).text(`${commentCounter} comments`);
             setTimeout(() => {
                 comment.remove();
             }, 500)
