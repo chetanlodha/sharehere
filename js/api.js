@@ -86,9 +86,11 @@ const populateProfilePage = () => {
         cache: false,
         success: function (data) {
             data = JSON.parse(data)[0];
+            populateProfileHeader(data.profile_data);
+            if (!data.hasOwnProperty('post_id'))
+                return;
             console.log(data);
             appendAllPosts(data.post, 'profile');
-            populateProfileHeader(data.profile_data);
         },
         error: function (e) {
             alert("Failed to get profile details!");
