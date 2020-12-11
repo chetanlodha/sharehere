@@ -22,12 +22,7 @@ $("#createPost").on('submit', function (e) {
                 return
             console.log('post');
             appendPost(data, 'home');
-            // $('.post:first-child').addClass('animatePost shadow-light');
-            // if ($('.post:first-child').find('.media .images img').length > 0)
-            //     $('.post:first-child').find('.images').lightGallery({
-            //         download: false
-            //     });
-            setUpPostActions('homes');
+            setUpPostActions('home');
             $('.post:first-child').addClass('animatePost shadow-light');
             form.children('textarea').val('');
             form.find('input').val('');
@@ -48,6 +43,7 @@ const getAllPosts = () => {
             if (!data[0].hasOwnProperty('post_id'))
                 return;
             console.log(data);
+            $('.home .latest-posts .posts-container').empty();
             appendAllPosts(data, 'home');
         },
         error: function (e) {
@@ -57,7 +53,6 @@ const getAllPosts = () => {
 }
 
 const deletePost = (postId) => {
-    console.log(postId);
     let data = {
         action: 'delete',
         post_id: postId
@@ -88,16 +83,44 @@ const populateProfilePage = () => {
             data = JSON.parse(data)[0];
             console.log(data);
             populateProfileHeader(data.profile_data);
+            $('.profile .latest-posts .posts-container').empty();
             if (!data.post[0].hasOwnProperty('post_id'))
                 return;
-            console.log(data);
-            appendAllPosts(data.post, 'profile');
+            if (data.profile_data.isFriend || profileId == currentUser)
+                appendAllPosts(data.post, 'profile');
         },
         error: function (e) {
             alert("Failed to get profile details!");
         }
     });
 }
+
+$('.profile-image-container input').on('change', function () {
+    var formdata = new FormData;
+    var name_img = this.files[0].name;
+    var extensions = ["jpg", "png", "jpeg"];
+    var img_exten = name_img.split('.').pop();
+    if (extensions.indexOf(img_exten) !== -1) {
+        formdata.append("file", this.files[0]);
+        $.ajax({
+            type: 'POST',
+            url: 'api/upload_profile_picture.php',
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            data: formdata,
+            success: function (data) {
+                if (data.status = 201) {
+                    $(".logoutContainer .profile-icon").attr("src", `php/post/post/uploads/${data.image}`);
+                    populateProfilePage();
+                } else {
+                    alert(error);
+                }
+            }
+        });
+    } else
+        alert('Invalid Extension');
+});
 
 const createComment = (postId, content) => {
     let data = {
@@ -167,6 +190,99 @@ const deleteComment = (postId, dateCreated, comment) => {
         },
         error: function (e) {
             alert(`Failed to remove comment!`);
+            console.log(e);
+        }
+    });
+}
+$('.search-container input').on('change', function (e) {
+    $.ajax({
+        url: "api/get_allusers.php",
+        type: "POST",
+        data: {
+            keyword: $(this).val(),
+        },
+        cache: false,
+        success: function (data) {
+            data = JSON.parse(data);
+            $('.search-results').empty();
+            appendSearchResults(data);
+            Array.from($('.result')).forEach((result, i) => {
+                setTimeout(() => {
+                    $(result).addClass('visible');
+                }, (i + 1) * 150)
+            })
+            console.log(data);
+        },
+        error: function (e) {
+            alert(`Failed to remove comment!`);
+            console.log(e);
+        }
+    });
+})
+
+const sendFriendRequest = (friend_id) => {
+    $.ajax({
+        url: "api/send_req.php",
+        type: "POST",
+        data: {
+            friend_id: friend_id,
+        },
+        cache: false,
+        dataType: "json",
+        error: function (e) {
+            alert(`Failed to send req!`);
+            console.log(e);
+        }
+    });
+}
+
+const getAllNotificaitons = () => {
+    $.ajax({
+        url: "api/notification.php",
+        type: "POST",
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+            appendAllNotifications(data);
+        },
+        error: function (e) {
+            alert(`Failed to send req!`);
+            console.log(e);
+        }
+    });
+}
+const declineNotification = (friend_id) => {
+    $.ajax({
+        url: "api/cancel_req.php",
+        type: "POST",
+        data: {
+            friend_id: friend_id
+        },
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+        },
+        error: function (e) {
+            alert(`Failed to send req!`);
+            console.log(e);
+        }
+    });
+}
+const acceptNotification = (friend_id) => {
+    $.ajax({
+        url: "api/accept_req.php",
+        type: "POST",
+        data: {
+            friend_id: friend_id
+        },
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+        },
+        error: function (e) {
+            alert(`Failed to send req!`);
             console.log(e);
         }
     });

@@ -22,6 +22,7 @@ if(isset($_FILES["file"]["tmp_name"])){
         $data['error'] = 'Updated';
         $data['status'] = 201;
         $data['image'] = $imgnewfile;
+        $_SESSION['profile_picture'] = $imgnewfile;
     }else { 
         $data['status'] = 301;
         $data['error'] = 'error';
@@ -31,6 +32,4 @@ if(isset($_FILES["file"]["tmp_name"])){
     echo "error";
 
 }
-
-
 ?>

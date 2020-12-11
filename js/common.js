@@ -99,16 +99,36 @@ $('.nav-item').on('click', function (e) {
     else if (index == activePageIndex) {
       navItem.addClass('active');
       if (navItem.data('page') == 'profile') {
-        var queryParams = new URLSearchParams(window.location.search); // Set new or modify existing parameter value.
-        queryParams.set("profile", currentUser);
-        history.pushState(null, null, "?" + queryParams.toString()); // Replace current querystring with the new one.
-        populateProfilePage();
+        temp(true);
+      }
+      if (navItem.data('page') == 'notifications') {
+        $('.latest-notifications').empty();
+        getAllNotificaitons();
+      }
+      if (navItem.data('page') == 'home') {
+        getAllPosts();
+      }
+      if (navItem.data('page') == 'search') {
+        $('.search-container input').val('');
+        $('.search-results').empty();
       }
     }
   })
   allPages.forEach(page => $(page).hasClass(newPage) ? $(page).show() : $(page).hide());
   document.title = `Sharehere | ${$(this).children('span').text()}`;
 })
+
+const temp = (fromNavBar, user = null) => {
+  var queryParams = new URLSearchParams(window.location.search); // Set new or modify existing parameter value.
+  if (fromNavBar)
+    queryParams.set("profile", currentUser);
+  else
+    queryParams.set("profile", btoa(user));
+  $('.search').hide();
+  $('.profile').show();
+  history.pushState(null, null, "?" + queryParams.toString()); // Replace current querystring with the new one.
+  populateProfilePage();
+}
 
 $("#toggleLogoutContainer").on("click", () =>
   logoutContainer.toggleClass("visible").toggleClass("hidden")
@@ -119,8 +139,6 @@ $("#toggleLogoutContainer").on("click", () =>
 ********************************************/
 
 const appendAllPosts = (data, page) => {
-  if (page == 'profile')
-    $('.profile .posts-container').empty();
   data.forEach((post, i) => {
     appendPost(post, page, i)
   });
@@ -156,12 +174,12 @@ const appendPost = (post, page, i) => {
                   <div class="header d-flex flex-row justify-content-between position-relative">
                       <div class="info d-flex">
                           ${(post.profile_picture) ?
-                            `<img class="profile-icon" src="php/post/post/uploads/${post.profile_picture}" alt="User profile">`
-                            :
-                            ` <div class="bg-grey rounded-circle">
+      `<img class="profile-icon" src="php/post/post/uploads/${post.profile_picture}" alt="User profile">`
+      :
+      ` <div class="bg-grey rounded-circle">
                                 <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
                               </div>`
-                          }
+    }
                           <div class="current-user ml-2">
                               <div>
                                   <h6 class="mb-0">${post.name}</h6>
@@ -287,6 +305,10 @@ const setUpCommentActions = (postId) => {
 
 const populateProfileHeader = (profile) => {
   let aboutPosition = $('.profile-header .info .about').position();
+  let addFriend = $('.profile-header .row-2 .actions .add-friend');
+  let requestSent = $('.profile-header .row-2 .actions .request-sent');
+  let url = new URL(window.location.href);
+  let profileId = url.searchParams.get('profile');
   aboutPosition = {
     top: aboutPosition.top + 40,
     left: aboutPosition.left + 20,
@@ -300,47 +322,114 @@ const populateProfileHeader = (profile) => {
     $('.profile .profile-placeholder-image-container').css('display', 'flex');
     $('.profile .profile-image').hide().attr('src', ` `);
   }
+  if (profileId == currentUser) {
+    if (!addFriend.hasClass('hidden'))
+      addFriend.addClass('hidden');
+    if (!requestSent.hasClass('hidden'))
+      requestSent.addClass('hidden');
+    $('.profile-header .profile-image-container .icons').show();
+  } else {
+    $('.profile-header .profile-image-container .icons').hide();
+    if (!profile.isFriend)
+      if (!profile.hasNotification)
+        addFriend.removeClass('hidden');
+    if (profile.hasNotification)
+      requestSent.removeClass('hidden');
+  }
+}
 
-  //yha lagado k
-  $('.profile-image-container input').on('change', function () {
-    //  console.log('hh');
-    var formdata = new FormData;
-    var name_img = this.files[0].name;
-    var extensions = ["jpg", "png", "jpeg"];
-    var img_exten = name_img.split('.');
-    if (extensions.indexOf(img_exten[1]) !== -1) {
-      //alert('valid extension');
-      // if(this.files[0].size > 20000000){
-      formdata.append("file", this.files[0]);
-      $.ajax({
-        type: 'POST',
-        url: 'api/upload_profile_picture.php',
-        processData: false,
-        contentType: false,
-        dataType: "json",
-        data: formdata,
-        success: function (data) {
-          if (data.status = 201) {
-            if ($('.profile .profile-placeholder-image-container').css('display') == 'flex')
-              $('.profile .profile-placeholder-image-container').hide()
-            $(".profile .profile-image").attr("src", `php/post/post/uploads/${data.image}`);
-            $('.profile .profile-image').show()
-          } else {
-            alert(error);
-          }
-        }
-      });
-      // }else{
-      //   alert('bigger file size');
-      // }
-    } else {
-      alert('Invalid Extension');
-    }
+$('.profile-header .row-2 .actions .add-friend').on('click', function (e) {
+  let url = new URL(window.location.href);
+  let profileId = atob(url.searchParams.get('profile'));
+  sendFriendRequest(profileId);
+  $(this).addClass('hidden').next().removeClass('hidden');
+});
+$('.profile-header .row-2 .actions .request-sent').on('click', function (e) {
+  let url = new URL(window.location.href);
+  let profileId = atob(url.searchParams.get('profile'));
+  declineNotification(profileId);
+  $(this).addClass('hidden').prev().removeClass('hidden');
+});
 
-    console.log(img_exten);
+
+const appendSearchResults = (data) => {
+  let newResult;
+  data.user.forEach(result => {
+    newResult = ` <div class="result d-flex flex-wrap justify-content-between align-items-center bg-white rounded shadow-light p-3 m-2">
+                      <div class="info d-flex" data-userid="${result.id}">
+                      ${(result.profile_picture) ?
+        `<img class="profile-icon" src="php/result/post/uploads/${result.profile_picture}" alt="User profile">`
+        :
+        ` <div class="bg-grey rounded-circle">
+                            <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                          </div>`
+      }
+                       
+                          <div class="d-flex flex-column ml-2">
+                              <span class="name">${result.name}</span>
+                              <small><span class="city">Firozabad, Uttar Pradesh</span></small>
+                          </div>
+                      </div>
+                      <div class="actions d-flex">
+                          <img class="icons ${(data.friends.includes(result.id)) ? `hidden` : (result.isAlreadySent) ? 'hidden' : ''} add-friend" src="assets/icons/profile-addFriend.svg" alt="">
+                          <img class="icons ${(result.isAlreadySent) ? `` : `hidden`} request-sent" src="assets/icons/request-sent.svg" alt="">
+                          <img class="icons ml-2" src="assets/icons/message-send.svg" alt="">
+                      </div>
+                  </div>`;
+    console.log(data.friends.includes(result.id), result.isAlreadySent);
+    $('.search-results').append(newResult);
+    searchResultActions();
+  })
+}
+
+const searchResultActions = () => {
+  $('.search-results .result:last-child .info').on('click', function (e) {
+    temp(false, $(this).data('userid'));
+  });
+  $('.search-results .result:last-child .actions .add-friend').on('click', function (e) {
+    sendFriendRequest($(this).parents('.result').children('.info').attr('data-userid'));
+    $(this).addClass('hidden').next().removeClass('hidden');
+  });
+  $('.search-results .result:last-child .actions .request-sent').on('click', function (e) {
+    declineNotification($(this).parents('.result').children('.info').attr('data-userid'));
+    $(this).addClass('hidden').prev().removeClass('hidden');
   });
 }
 
+const appendAllNotifications = (data) => {
+  data.forEach(notification => {
+    let newNotification = `  <div class="notification shadow-light bg-white rounded m-1 col d-flex flex-column justify-content-center align-items-center p-3">
+                                <div class="info d-flex flex-column">
+                                ${(notification.profile_picture) ?
+        `<img class="profile-icon" src="php/result/post/uploads/${notification.profile_picture}" alt="User profile">`
+        :
+        ` <div class="bg-grey rounded-circle">
+                                                      <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                                                    </div>`
+      }
+                                    <span class="mt-2">${notification.name}</span>
+                                </div>
+                                <div class="actions mt-2" data-userid="${notification.id}">
+                                    <button class="btn btn-green accept">Accept</button>
+                                    <button class="btn btn-red ml-3 decline">Decline</button>
+                                </div>
+                              </div>`;
+    $('.latest-notifications').append(newNotification);
+    setUpNotificationActions();
+  })
+}
+
+
+const setUpNotificationActions = () => {
+  $('.notification:last-child .actions .decline').on('click', function (e) {
+    declineNotification($(this).parent().data('userid'));
+    $(this).parents('.notification').remove();
+  });
+  $('.notification:last-child .actions .accept').on('click', function (e) {
+    acceptNotification($(this).parent().data('userid'));
+    $(this).parents('.notification').remove();
+  });
+}
 /*******************************************
 *************** MISCELLANEOUS ***************
 ********************************************/

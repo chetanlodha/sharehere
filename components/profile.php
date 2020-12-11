@@ -23,7 +23,8 @@
                 <span class="photos">Photos</span>
             </div>
             <div class="actions">
-                <img class="icons" src="assets/icons/profile-addFriend-bold.svg" alt="Add friend">
+                <img class="icons hidden add-friend" src="assets/icons/profile-addFriend.svg" alt="">
+                <img class="icons hidden request-sent" src="assets/icons/request-sent.svg" alt="">
                 <img class="icons" src="assets/icons/message-send-bold.svg" alt="Send message">
             </div>
         </div>

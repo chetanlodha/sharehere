@@ -9,6 +9,7 @@
 /* primary-rgb: rgb(97, 121, 183, 1) */
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -27,12 +28,15 @@ html {
     min-height: unset !important;
     border-radius: 0 0px 15px 15px !important;
   }
+
   .nav-items a:not(:first-child) {
     margin-left: 10px;
   }
+
   .chatbar {
     max-width: 200px !important;
   }
+
   .post:not(:first-child) {
     margin-top: 10px !important;
   }
@@ -43,7 +47,9 @@ body {
   min-height: 100vh;
 }
 
-.search, .profile, .notifications {
+.search,
+.profile,
+.notifications {
   display: none;
 }
 
@@ -141,13 +147,17 @@ button:focus {
   transform: scale(0.9) !important;
 }
 
-.btn-primary:hover, .btn-light:hover {
+.btn-primary:hover,
+.btn-light:hover {
   /* transform: translateY(-2px);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); */
   /* background-color: unset !important; */
 }
 
-.btn-primary:focus, .btn-light:focus, .btn-green:focus, .btn-red:focus {
+.btn-primary:focus,
+.btn-light:focus,
+.btn-green:focus,
+.btn-red:focus {
   outline: none !important;
   box-shadow: none !important;
 }
@@ -275,6 +285,19 @@ textarea {
 
 .object-fit-cover {
   object-fit: cover;
+}
+
+.icons.hidden {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+}
+
+.icons.add-friend,
+.icons.request-sent,
+.icons.cancel-request {
+  transition: 0.3s ease;
 }
 
 /* Small devices (mobiles, 576px and up) */

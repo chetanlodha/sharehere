@@ -12,7 +12,7 @@ if(isset($_SESSION['sess_id']))
 	ON post.user_id = users.id
 	INNER JOIN friends
 	ON post.user_id = friends.friend_id
-	WHERE  friends.user_id =  '$user_id'";
+	WHERE  friends.user_id =  '$user_id' OR friends.friend_id = '$user_id'";
 	if($result = mysqli_query($link, $query))
 	{  
 		$i = 0;
@@ -52,5 +52,5 @@ if(isset($_SESSION['sess_id']))
 else
 {
 	header('Location: http://index.php');
-}	
+}
 ?>

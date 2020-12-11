@@ -37,7 +37,9 @@
 
 /************************************************/
 
-.create-post-actions div button, .create-post-actions div input, .invisible-button {
+.create-post-actions div button,
+.create-post-actions div input,
+.invisible-button {
   left: 0;
   z-index: 10;
   opacity: 0;
@@ -80,6 +82,7 @@
     transform: translateY(15px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -130,7 +133,8 @@
   margin-left: 10px;
 }
 
-.post .footer div img, .post .footer span {
+.post .footer div img,
+.post .footer span {
   cursor: pointer;
 }
 
@@ -212,6 +216,7 @@
   0% {
     background-position: 0% 50%;
   }
+
   100% {
     background-position: 100% 100%;
   }
@@ -243,13 +248,15 @@
 }
 
 .profile-image {
+  display: none;
   width: 200px;
   height: 200px;
   border: 2px solid white;
   object-fit: cover;
 }
 
-.profile .row-2 .info span:not(:first-child), .profile .row-2 .actions img:not(:first-child) {
+.profile .row-2 .info span:not(:first-child),
+.profile .row-2 .actions img:not(:first-child) {
   margin-left: 10px;
 }
 
@@ -311,7 +318,7 @@
 
 /***********************************************/
 
-.notification{
+.notification {
   min-width: 220px !important;
 }
 
@@ -319,7 +326,7 @@
   cursor: pointer;
 }
 
-.notification .actions button{
+.notification .actions button {
   font-size: 0.8em;
 }
 
@@ -329,10 +336,27 @@
 
 /***********************************************/
 
-.search-container .form-control{
+.search-container .form-control {
   background-color: white !important;
 }
 
 .search-results {
   margin-top: 15px !important;
+}
+
+.result {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px);
+  transition: 1s ease;
+}
+
+.result.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.actions {
+  position: relative;
 }
