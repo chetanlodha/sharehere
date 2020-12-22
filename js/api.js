@@ -84,10 +84,12 @@ const populateProfilePage = () => {
             console.log(data);
             populateProfileHeader(data.profile_data);
             $('.profile .latest-posts .posts-container').empty();
-            if (!data.post[0].hasOwnProperty('post_id'))
-                return;
-            if (data.profile_data.isFriend || profileId == currentUser)
+            if (data.profile_data.isFriend || profileId == currentUser) {
+                populateFriendsList(data.friends);
+                if (!data.post[0].hasOwnProperty('post_id'))
+                    return;
                 appendAllPosts(data.post, 'profile');
+            }
         },
         error: function (e) {
             alert("Failed to get profile details!");
@@ -194,7 +196,7 @@ const deleteComment = (postId, dateCreated, comment) => {
         }
     });
 }
-$('.search-container input').on('change', function (e) {
+$('.search-container input').on('keyup', function (e) {
     $.ajax({
         url: "api/get_allusers.php",
         type: "POST",
@@ -229,6 +231,25 @@ const sendFriendRequest = (friend_id) => {
         },
         cache: false,
         dataType: "json",
+        error: function (e) {
+            alert(`Failed to send req!`);
+            console.log(e);
+        }
+    });
+}
+
+const removeFriend = (friend_id) => {
+    $.ajax({
+        url: "api/remove_friend.php",
+        type: "POST",
+        data: {
+            friend_id: friend_id,
+        },
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+        },
         error: function (e) {
             alert(`Failed to send req!`);
             console.log(e);

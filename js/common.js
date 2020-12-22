@@ -307,6 +307,8 @@ const populateProfileHeader = (profile) => {
   let aboutPosition = $('.profile-header .info .about').position();
   let addFriend = $('.profile-header .row-2 .actions .add-friend');
   let requestSent = $('.profile-header .row-2 .actions .request-sent');
+  let sendMessage = $('.profile-header .row-2 .actions .send-message');
+  let removeFriend = $('.profile-header .row-2 .actions .remove-friend');
   let url = new URL(window.location.href);
   let profileId = url.searchParams.get('profile');
   aboutPosition = {
@@ -323,19 +325,78 @@ const populateProfileHeader = (profile) => {
     $('.profile .profile-image').hide().attr('src', ` `);
   }
   if (profileId == currentUser) {
+    if (!removeFriend.hasClass('hidden'))
+      removeFriend.addClass('hidden');
     if (!addFriend.hasClass('hidden'))
       addFriend.addClass('hidden');
     if (!requestSent.hasClass('hidden'))
       requestSent.addClass('hidden');
+    if (!sendMessage.hasClass('hidden'))
+      sendMessage.addClass('hidden');
     $('.profile-header .profile-image-container .icons').show();
   } else {
     $('.profile-header .profile-image-container .icons').hide();
-    if (!profile.isFriend)
+    if (!profile.isFriend) {
       if (!profile.hasNotification)
         addFriend.removeClass('hidden');
+    }
+    else {
+      if (sendMessage.hasClass('hidden'))
+        sendMessage.removeClass('hidden');
+      if (removeFriend.hasClass('hidden'))
+        removeFriend.removeClass('hidden');
+    }
+
     if (profile.hasNotification)
       requestSent.removeClass('hidden');
   }
+}
+
+const populateFriendsList = (data) => {
+  console.log(data);
+  $('.friends-container .friends-list .col1').empty();
+  $('.friends-container .friends-list .col2').empty();
+  let count = (data.length == 1) ? 1 : data.length / 2;
+  data.forEach((friend, i) => {
+    let newFriends = `<div class="friend d-flex justify-content-between align-items-center bg-white rounded shadow-light p-3" data-friendid="${friend.id}">
+                        <div class="d-flex align-items-center">
+                        ${(friend.profile_picture) ?
+        `<img class="profile-icon" src="php/post/post/uploads/${friend.profile_picture}" alt="User profile">`
+        :
+        ` <div class="bg-grey rounded-circle">
+                              <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                            </div>`
+      }
+                          <span class="ml-2">${friend.name}</span>
+                        </div>
+                        <div class="confirmRemoveFriend d-flex flex-wrap justify-content-between align-items-center bg-white rounded shadow-light hidden">
+                          <span>Are you sure you want to remove?</span>
+                          <div>
+                            <img class="icons remove" src="assets/icons/tick-square.svg" alt="Confirm remove friend">
+                            <img class="icons close-confirmRemoveFriend" src="assets/icons/close-square.svg" alt="Confirm remove friend">
+                          </div>
+                        </div>
+                        <img class="icons remove-friend" src="assets/icons/profile_friend.svg" alt="Remove Friend">
+                      </div>`
+    $(`.friends-container .friends-list .${(i < count || data.length == 1) ? "col1" : "col2"}`).append(newFriends);
+    setUpFriendsListAction((i < count || data.length == 1));
+  });
+}
+const setUpFriendsListAction = (checkColumn) => {
+  $(`.friends-container .friends-list .${checkColumn ? "col1" : "col2"} .friend:last-child .remove-friend`).on("click", function (e) {
+    let confirm = $(this).prev();
+    if (confirm.hasClass('hidden'))
+      confirm.removeClass('hidden');
+    else
+      confirm.addClass('hidden');
+  });
+  $(`.friends-container .friends-list .${checkColumn ? "col1" : "col2"} .friend:last-child .confirmRemoveFriend .remove`).on("click", function (e) {
+    removeFriend($(this).parents('.friend').data("friendid"));
+    $(this).parents('.friend').remove();
+  });
+  $(`.friends-container .friends-list .${checkColumn ? "col1" : "col2"} .friend:last-child .confirmRemoveFriend .close-confirmRemoveFriend`).on("click", function (e) {
+    $(this).parents('.confirmRemoveFriend').addClass('hidden');
+  });
 }
 
 $('.profile-header .row-2 .actions .add-friend').on('click', function (e) {
@@ -344,11 +405,38 @@ $('.profile-header .row-2 .actions .add-friend').on('click', function (e) {
   sendFriendRequest(profileId);
   $(this).addClass('hidden').next().removeClass('hidden');
 });
+
 $('.profile-header .row-2 .actions .request-sent').on('click', function (e) {
   let url = new URL(window.location.href);
   let profileId = atob(url.searchParams.get('profile'));
   declineNotification(profileId);
   $(this).addClass('hidden').prev().removeClass('hidden');
+});
+
+$('.profile-header .row-2 .actions .remove-friend').on('click', function (e) {
+  let confirm = $('.confirmRemoveFriend');
+  if (confirm.hasClass('hidden'))
+    confirm.removeClass('hidden')
+  else
+    confirm.addClass('hidden')
+});
+
+$('.profile-header .confirmRemoveFriend img').on('click', function (e) {
+  let url = new URL(window.location.href);
+  let profileId = atob(url.searchParams.get('profile'));
+  removeFriend(profileId);
+  $(this).parent().addClass('hidden');
+  $('.profile-header .row-2 .actions .remove-friend').addClass('hidden').siblings('.add-friend').removeClass('hidden');
+});
+
+$('.profile-header .row-2 .info .friends').on('click', function (e) {
+  $('.profile .latest-posts').hide();
+  $('.profile .friends-container').show();
+});
+
+$('.profile .friends-container .close-friends-tab').on('click', function (e) {
+  $('.profile .latest-posts').show();
+  $('.profile .friends-container').hide();
 });
 
 
@@ -358,7 +446,7 @@ const appendSearchResults = (data) => {
     newResult = ` <div class="result d-flex flex-wrap justify-content-between align-items-center bg-white rounded shadow-light p-3 m-2">
                       <div class="info d-flex" data-userid="${result.id}">
                       ${(result.profile_picture) ?
-        `<img class="profile-icon" src="php/result/post/uploads/${result.profile_picture}" alt="User profile">`
+        `<img class="profile-icon" src="php/post/post/uploads/${result.profile_picture}" alt="User profile">`
         :
         ` <div class="bg-grey rounded-circle">
                             <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
@@ -401,7 +489,7 @@ const appendAllNotifications = (data) => {
     let newNotification = `  <div class="notification shadow-light bg-white rounded m-1 col d-flex flex-column justify-content-center align-items-center p-3">
                                 <div class="info d-flex flex-column">
                                 ${(notification.profile_picture) ?
-        `<img class="profile-icon" src="php/result/post/uploads/${notification.profile_picture}" alt="User profile">`
+        `<img class="profile-icon" src="php/post/post/uploads/${notification.profile_picture}" alt="User profile">`
         :
         ` <div class="bg-grey rounded-circle">
                                                       <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
@@ -416,7 +504,7 @@ const appendAllNotifications = (data) => {
                               </div>`;
     $('.latest-notifications').append(newNotification);
     setUpNotificationActions();
-  })
+  });
 }
 
 

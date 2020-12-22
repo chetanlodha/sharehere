@@ -5,16 +5,35 @@ if(isset($_GET['id']))
 {
 	$user_id = mysqli_real_escape_string($link, base64_decode($_GET['id']));
 	$data = array(array());
+	$friends = array();
 	$data_user = array();
 	$sess_id = $_SESSION['sess_id'];
+	// echo $sess_id;
 	// $sess_id = 1;
 	// $user_id = 7;
 	$cmd = mysqli_query($link, "SELECT * FROM `users` WHERE id = '$user_id'");
 	$friendresult = mysqli_query($link , "SELECT * FROM `friends` WHERE (`user_id` = '$sess_id' AND `friend_id` = '$user_id') 
 	OR (`user_id` = '$user_id' AND `friend_id` = '$sess_id')");
+	$getAllFriends = mysqli_query($link,"SELECT * FROM `friends` WHERE `user_id` = '$sess_id' OR `friend_id` = '$sess_id' ");
+	
 	$notification = mysqli_query($link,"SELECT `receiver_id` FROM `friend_requests` where `sender_id` = '$sess_id'  AND `receiver_id` ='$user_id' ");
-	// print_r(mysqli_fetch_all($notification));
+	// print_r(mysqli_fetch_all($getAllFriends));
 	// print_r($notification);
+	while($row = mysqli_fetch_assoc($getAllFriends)){
+		//print_r($row); // y kyu nhi ara yr tele
+		if ($row['user_id'] == $sess_id) {
+            $friend = $row['friend_id'];
+            $get_user = "SELECT `name`,`profile_picture`,`id` FROM `users` WHERE `id` = '$friend'";
+            $result =  mysqli_query($link, $get_user);
+            array_push($friends, $result->fetch_assoc());
+        } else {
+            $friend =  $row['user_id'];
+            $get_user = "SELECT `name`,`profile_picture`,`id` FROM `users` WHERE `id` = '$friend'";
+            $result =  mysqli_query($link, $get_user);
+            array_push($friends, $result->fetch_assoc());
+        }
+	}
+	// print_r($friends);
     if (mysqli_num_rows($cmd) !=0 ) 
 	{
         $row=mysqli_fetch_array($cmd);
@@ -67,7 +86,8 @@ if(isset($_GET['id']))
 		echo json_encode($data);
 	}
 	$data[0]['profile_data'] = $data_user;
-    $data[0]['post'] = $data_post;		
+	$data[0]['post'] = $data_post;	
+	$data[0]['friends'] = $friends;	
     echo json_encode($data);
 }
 else

@@ -16,16 +16,21 @@
         <div class="flex-grow-1 d-flex justify-content-center align-items-center text-center">
             <h6>"Lorem ipsum dolor sirt amet"</h6>
         </div>
-        <div class="d-flex justify-content-between mb-1 mt-2 mt-md-0">
+        <div class="d-flex justify-content-between position-relative mb-1 mt-2 mt-md-0">
             <div class="info d-flex align-items-center ml-md-2">
                 <span class="about" onclick="$('.about-container').addClass('visible')">About</span>
                 <span class="friends">Friends</span>
                 <span class="photos">Photos</span>
             </div>
-            <div class="actions">
-                <img class="icons hidden add-friend" src="assets/icons/profile-addFriend.svg" alt="">
-                <img class="icons hidden request-sent" src="assets/icons/request-sent.svg" alt="">
-                <img class="icons" src="assets/icons/message-send-bold.svg" alt="Send message">
+            <div class="actions d-flex flex-wrap">
+                <img class="icons hidden add-friend" src="assets/icons/profile-addFriend.svg" alt="Add Friend">
+                <img class="icons hidden request-sent" src="assets/icons/request-sent.svg" alt="Request Sent">
+                <img class="icons hidden remove-friend" src="assets/icons/profile_friend.svg" alt="Remove Friend">
+                <img class="icons hidden send-message" src="assets/icons/message-send-bold.svg" alt="Send message">
+            </div>
+            <div class="confirmRemoveFriend hidden">
+                <span>Are you sure you want to remove?</span>
+                <img class="icons" src="assets/icons/tick-square.svg" alt="Confirm remove friend">
             </div>
         </div>
     </div>
@@ -41,6 +46,15 @@
 </section>
 <section class="latest-posts">
     <h4 class="font-weight-bold m-3">All posts</h4>
-    <div class="posts-container d-flex flex-column">
+    <div class="posts-container d-flex flex-column"></div>
+</section>
+<section class="friends-container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h4 class="font-weight-bold m-3">Friends</h4>
+        <img class="icons close-friends-tab mr-2" src="assets/icons/close-square.svg" alt="Close friends tab">
+    </div>
+    <div class="friends-list d-flex flex-column flex-lg-row flex-wrap">
+        <div class="col1 col d-flex flex-column"></div>
+        <div class="col2 col d-flex flex-column"></div>
     </div>
 </section>
