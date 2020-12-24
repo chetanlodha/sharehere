@@ -22,3 +22,7 @@ body{
 .container .authentication p span{
     color: #6179B7;
 }
+
+.form-control.error{
+    border: 1px solid red !important;
+}
