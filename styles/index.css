@@ -310,6 +310,7 @@
 
 .friend {
   position: relative;
+  overflow: hidden;
 }
 
 .friends-list .col .friend:not(:first-child) {
@@ -317,11 +318,22 @@
 }
 
 .friend .confirmRemoveFriend {
-  height: 100%;
+  height: fit-content;
+  min-height: 100%;
   width: 100%;
-  top: unset !important;
+  top: 15px;
   left: 0;
   right: 0;
+}
+
+.friend .confirmRemoveFriend span {
+  flex: 1 1 80%;
+}
+
+.friend .confirmRemoveFriend div {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
 }
 
 .confirmRemoveFriend {
@@ -332,7 +344,7 @@
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 15px;
   transform: translateY(-15px);
-  transition: 0.5s ease;
+  transition: 0.4s ease;
 }
 
 .confirmRemoveFriend.hidden {
@@ -361,6 +373,11 @@
 
 .notification .info {
   cursor: pointer;
+  flex: 1 1 50%;
+}
+
+.notification .actions {
+  flex: 1 1 1%;
 }
 
 .notification .actions button {

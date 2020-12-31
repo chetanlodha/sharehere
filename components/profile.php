@@ -54,7 +54,7 @@
         <img class="icons close-friends-tab mr-2" src="assets/icons/close-square.svg" alt="Close friends tab">
     </div>
     <div class="friends-list d-flex flex-column flex-lg-row flex-wrap">
-        <div class="col1 col d-flex flex-column"></div>
-        <div class="col2 col d-flex flex-column"></div>
+        <div class="col1 col d-flex flex-column mt-2 px-1"></div>
+        <div class="col2 col d-flex flex-column mt-2 px-1"></div>
     </div>
 </section>

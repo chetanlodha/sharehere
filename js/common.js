@@ -373,7 +373,7 @@ const populateFriendsList = (data) => {
                           <span>Are you sure you want to remove?</span>
                           <div>
                             <img class="icons remove" src="assets/icons/tick-square.svg" alt="Confirm remove friend">
-                            <img class="icons close-confirmRemoveFriend" src="assets/icons/close-square.svg" alt="Confirm remove friend">
+                            <img class="icons close-confirmRemoveFriend ml-2" src="assets/icons/close-square.svg" alt="Confirm remove friend">
                           </div>
                         </div>
                         <img class="icons remove-friend" src="assets/icons/profile_friend.svg" alt="Remove Friend">
@@ -486,8 +486,8 @@ const searchResultActions = () => {
 
 const appendAllNotifications = (data) => {
   data.forEach(notification => {
-    let newNotification = `  <div class="notification shadow-light bg-white rounded m-1 col d-flex flex-column justify-content-center align-items-center p-3">
-                                <div class="info d-flex flex-column">
+    let newNotification = `  <div class="notification shadow-light bg-white rounded m-1 col d-flex flex-wrap align-items-center p-3">
+                                <div class="info d-flex align-items-center">
                                 ${(notification.profile_picture) ?
         `<img class="profile-icon" src="php/post/post/uploads/${notification.profile_picture}" alt="User profile">`
         :
@@ -495,9 +495,9 @@ const appendAllNotifications = (data) => {
                                                       <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
                                                     </div>`
       }
-                                    <span class="mt-2">${notification.name}</span>
+                                    <span class="ml-2">${notification.name}</span>
                                 </div>
-                                <div class="actions mt-2" data-userid="${notification.id}">
+                                <div class="actions d-flex justify-content-center p-1" data-userid="${notification.id}">
                                     <button class="btn btn-green accept">Accept</button>
                                     <button class="btn btn-red ml-3 decline">Decline</button>
                                 </div>
