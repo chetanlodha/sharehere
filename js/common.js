@@ -87,7 +87,6 @@ const setNavbarScrollListener = () => {
 };
 
 $('.nav-item').on('click', function (e) {
-  // let activePageIndex = $(this).index();
   // let navItems = Array.from($('.nav-item'));
   // let newPage = $(this).data('page');
   // let allPages = Array.from($('.main')[0].children);
@@ -130,6 +129,7 @@ $('.nav-item').on('click', function (e) {
     setTimeout(() => {
       $(`.${previousActivePage}`).addClass('d-none');
     }, 500);
+  }
   if (previousActivePage == 'search' && $('.page.profile.active').data('page') && currentActivePage != 'profile') {
     $('.page.profile').removeClass('active');
     setTimeout(() => {
@@ -213,7 +213,7 @@ const appendPost = (post, page, i) => {
   time = `at ${(time[0] > 12) ? time[0] - 12 : time[0]}:${time[1]} ${(time[0] >= 12) ? 'pm' : 'am'}`;
   date = `${date[1]} ${date[2]} ${date[3]} ${time}`;
   if (post.media) {
-    imageClass = (post.media.length > 1) ? "col-md-8 overflow-hidden" : "";
+    imageClass = (post.media.length > 1) ? "" : "";
     post.media.forEach((ele, i) => {
       if (/jpg|jpeg|png/.test(ele))
         images += `<img class="col-12 ${imageClass} img-fluid px-0" src="./php/post/post/${ele}" data-src="./php/post/post/${ele}">`;
@@ -274,7 +274,7 @@ const appendPost = (post, page, i) => {
                   </div>       
               </div>`;
   postContainer.prepend(newPost);
-  setUpPostActions(page, i);
+  setUpPostActions(page);
 }
 
 const setUpPostActions = (page) => {
@@ -330,15 +330,13 @@ const appendAllComments = (postId, data) => {
 
 const appendComment = (postId, comment) => {
   console.log(comment);
-  let newComment;
-  if (comment)
-    newComment = `<div class="comment px-2 d-flex justify-content-between align-items-center mb-3" data-datecreated="${comment.date_created}" data-id="${comment.id}">
+  if (!comment)
+    return;
+  let newComment = `<div class="comment px-2 d-flex justify-content-between align-items-center mb-3" data-datecreated="${comment.date_created}" data-id="${comment.id}">
                     <!--<div><img class="icons mr-2" src="../assets/user/profileImage.jpeg" alt="Commented by user's profile"></div>-->
                     <span>${comment.content}</span>
                     <img class="icons ml-2" src="assets/icons/close-square.svg" alt="Remove comment">
                   </div>`;
-  else
-    return;
   $(`.post[data-postid=${postId}] .latest-comments`).append(newComment);
   setUpCommentActions(postId);
 }
