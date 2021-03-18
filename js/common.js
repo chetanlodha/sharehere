@@ -130,7 +130,7 @@ $('.nav-item').on('click', function (e) {
     setTimeout(() => {
       $(`.${previousActivePage}`).addClass('d-none');
     }, 500);
-  } else if (previousActivePage == 'search' && $('.page.profile.active').data('page') && currentActivePage != 'profile') {
+  if (previousActivePage == 'search' && $('.page.profile.active').data('page') && currentActivePage != 'profile') {
     $('.page.profile').removeClass('active');
     setTimeout(() => {
       $('.page.profile').addClass('d-none');
