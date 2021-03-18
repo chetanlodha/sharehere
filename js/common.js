@@ -54,7 +54,7 @@ const getDimensions = () => {
 };
 
 const setDimensions = (isMobile) => {
-  $(".main").css(
+  $(".page").css(
     isMobile
       ? {
         "padding": "0 0px 20px 0px",
@@ -87,46 +87,97 @@ const setNavbarScrollListener = () => {
 };
 
 $('.nav-item').on('click', function (e) {
-  let activePageIndex = $(this).index();
-  let navItems = Array.from($('.nav-item'));
-  let newPage = $(this).data('page');
-  let allPages = Array.from($('.main')[0].children);
-  navItems.forEach(ele => {
-    let navItem = $(ele);
-    let index = navItem.index()
-    if (index != activePageIndex && navItem.hasClass('active'))
-      navItem.removeClass('active');
-    else if (index == activePageIndex) {
-      navItem.addClass('active');
-      if (navItem.data('page') == 'profile') {
-        temp(true);
-      }
-      if (navItem.data('page') == 'notifications') {
-        $('.latest-notifications').empty();
-        getAllNotificaitons();
-      }
-      if (navItem.data('page') == 'home') {
-        getAllPosts();
-      }
-      if (navItem.data('page') == 'search') {
-        $('.search-container input').val('');
-        $('.search-results').empty();
-      }
-    }
-  })
-  allPages.forEach(page => $(page).hasClass(newPage) ? $(page).show() : $(page).hide());
+  // let activePageIndex = $(this).index();
+  // let navItems = Array.from($('.nav-item'));
+  // let newPage = $(this).data('page');
+  // let allPages = Array.from($('.main')[0].children);
+  // navItems.forEach(ele => {
+  //   let navItem = $(ele);
+  //   let index = navItem.index()
+  //   if (index != activePageIndex && navItem.hasClass('active'))
+  //     navItem.removeClass('active');
+  //   else if (index == activePageIndex) {
+  //     navItem.addClass('active');
+  //     if (navItem.data('page') == 'profile') {
+  //       prepareProfilePage(true);
+  //     }
+  //     if (navItem.data('page') == 'notifications') {
+  //       $('.latest-notifications').empty();
+  //       getAllNotificaitons();
+  //     }
+  //     if (navItem.data('page') == 'home') {
+  //       getAllPosts();
+  //     }
+  //     if (navItem.data('page') == 'search') {
+  //       $('.search-container input').val('');
+  //       $('.search-results').empty();
+  //     }
+  //   }
+  // })
+  // allPages.forEach(page => $(page).hasClass(newPage) ? $(page).show() : $(page).hide());
+  const previousActiveNavItem = $('.nav-item.active');
+  const previousActivePage = previousActiveNavItem.data('page');
+  const currentActiveNavItem = $(this);
+  const currentActivePage = currentActiveNavItem.data('page');
+  if (previousActivePage != currentActivePage) {
+    currentActiveNavItem.addClass('active');
+    previousActiveNavItem.removeClass('active');
+    $(`.${currentActivePage}`).removeClass('d-none');
+    $(`.${previousActivePage}`).removeClass('active');
+    setTimeout(() => {
+      $(`.${currentActivePage}`).addClass('active');
+    }, 10)
+    setTimeout(() => {
+      $(`.${previousActivePage}`).addClass('d-none');
+    }, 500);
+  } else if (previousActivePage == 'search' && $('.page.profile.active').data('page') && currentActivePage != 'profile') {
+    $('.page.profile').removeClass('active');
+    setTimeout(() => {
+      $('.page.profile').addClass('d-none');
+    }, 500);
+  }
+  switch (currentActivePage) {
+    case 'home':
+      getAllPosts();
+      break;
+    case 'search':
+      $('.search-container input').val('');
+      $('.search-results').empty();
+      break;
+    case 'notifications':
+      $('.latest-notifications').empty();
+      getAllNotificaitons();
+      break;
+    case 'profile':
+      prepareProfilePage();
+      break;
+    default:
+      console.log('Page does not exists');
+  }
   document.title = `Sharehere | ${$(this).children('span').text()}`;
+  if (currentActivePage != 'profile') {
+    const url = new URL(window.location); // Set new or modify existing parameter value.
+    url.searchParams.delete('profile');
+    window.history.pushState({}, '', url); // Replace current querystring with the new one.
+  }
 })
 
-const temp = (fromNavBar, user = null) => {
-  var queryParams = new URLSearchParams(window.location.search); // Set new or modify existing parameter value.
-  if (fromNavBar)
-    queryParams.set("profile", currentUser);
+const prepareProfilePage = (user = null) => {
+  const url = new URL(window.location);
+  if (!user)
+    url.searchParams.set('profile', currentUser);
   else
-    queryParams.set("profile", btoa(user));
-  $('.search').hide();
-  $('.profile').show();
-  history.pushState(null, null, "?" + queryParams.toString()); // Replace current querystring with the new one.
+    url.searchParams.set("profile", btoa(user));
+  window.history.pushState({}, '', url);
+  // Hide search and display profile
+  $(`.profile`).removeClass('d-none');
+  $(`.search`).removeClass('active');
+  setTimeout(() => {
+    $(`.profile`).addClass('active');
+  }, 10)
+  setTimeout(() => {
+    $(`.search`).addClass('d-none');
+  }, 500);
   populateProfilePage();
 }
 
@@ -266,7 +317,6 @@ const appendAllComments = (postId, data) => {
   if (data[0].length == 0)
     appendComment(postId, null)
   else {
-    console.log(data.length);
     data.forEach(comment => {
       appendComment(postId, comment)
     })
@@ -472,7 +522,7 @@ const appendSearchResults = (data) => {
 
 const searchResultActions = () => {
   $('.search-results .result:last-child .info').on('click', function (e) {
-    temp(false, $(this).data('userid'));
+    prepareProfilePage($(this).data('userid'));
   });
   $('.search-results .result:last-child .actions .add-friend').on('click', function (e) {
     sendFriendRequest($(this).parents('.result').children('.info').attr('data-userid'));

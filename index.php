@@ -26,16 +26,16 @@ if (!isset($_SESSION["sess_user"])) {
 
       <div class="main d-flex flex-column justify-content-center w-100">
 
-        <section class="home">
+        <section class="page home active" data-page="home">
           <?php include('components/home.php') ?>
         </section>
-        <section class="search">
+        <section class="page search d-none" data-page="search">
           <?php include('components/search.php') ?>
         </section>
-        <section class="profile">
+        <section class="page profile d-none" data-page="profile">
           <?php include('components/profile.php') ?>
         </section>
-        <section class="notifications">
+        <section class="page notifications d-none" data-page="notifications">
           <?php include('components/notifications.php') ?>
         </section>
 
