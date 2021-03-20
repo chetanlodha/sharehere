@@ -11,7 +11,7 @@ if(isset($_SESSION['sess_id']))
     INNER JOIN users
 	ON post.user_id = users.id
 	INNER JOIN friends
-	ON post.user_id = friends.friend_id
+	ON post.user_id = friends.friend_id OR post.user_id = friends.user_id
 	WHERE  friends.user_id =  '$user_id' OR friends.friend_id = '$user_id'";
 	if($result = mysqli_query($link, $query))
 	{  
