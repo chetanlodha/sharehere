@@ -13,7 +13,7 @@ if ($_POST['action'] == 'create') {
 		$countfiles = count($_FILES['image']['name']);
 		if (!empty($_FILES['image']['name'][0])) {
 			$file = array();
-			$maxsize = 20971520;
+			$maxsize = 5242880;
 			if ((array_sum($_FILES['image']['size']) >= $maxsize) || ($_FILES["image"]["size"] == 0)) {
 				$file['status'] = 601;
 				$file['error'] = "File too large. File must be less than 5MB.";

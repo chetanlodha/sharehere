@@ -1,8 +1,6 @@
 
 $("#createPost").on('submit', function (e) {
     e.preventDefault();
-    if (!$('#createPost textarea').val())
-        return
     let form = $(this);
     let formData = new FormData(this);
     formData.append('action', 'create');
@@ -24,6 +22,7 @@ $("#createPost").on('submit', function (e) {
                 return
             console.log('post');
             appendPost(data, 'home');
+            setUpPostActions('home');
             $('.post:first-child').addClass('animatePost shadow-light');
             form.children('textarea').val('');
             form.find('input').val('');
@@ -35,24 +34,16 @@ $("#createPost").on('submit', function (e) {
 });
 
 const getAllPosts = () => {
-    console.log("test")
     $.ajax({
         url: `php/post/fetch_post.php`,
         type: "POST",
         cache: false,
         success: function (data) {
             data = JSON.parse(data);
-            $('.home .latest-posts .posts-container').empty();
-            if (!data[0].hasOwnProperty('post_id')) {
-                let noPosts = `<div class="mt-2 mb-3 d-flex flex-column align-items-center animateBottomToTop">
-                                    <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
-                                    <h5 class="font-weight-bold mt-3">No posts available.</h5>
-                                    <span class="text-center text-muted">Get started by creating your first post or making friends.</span>
-                                </div>`;
-                $('.home .latest-posts .posts-container').append(noPosts);
+            if (!data[0].hasOwnProperty('post_id'))
                 return;
-            }
-            console.log("Getting all posts", data);
+            console.log(data);
+            $('.home .latest-posts .posts-container').empty();
             appendAllPosts(data, 'home');
         },
         error: function (e) {
@@ -95,16 +86,8 @@ const populateProfilePage = () => {
             $('.profile .latest-posts .posts-container').empty();
             if (data.profile_data.isFriend || profileId == currentUser) {
                 populateFriendsList(data.friends);
-                console.log(data.post[0].hasOwnProperty('post_id'));
-                if (!data.post[0].hasOwnProperty('post_id')) {
-                    let noPosts = `<div class="mt-2 mb-3 d-flex flex-column align-items-center animateBottomToTop">
-                                    <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
-                                    <h5 class="font-weight-bold mt-3">No posts available.</h5>
-                                    <span class="text-center text-muted">Get started by creating your first post.</span>
-                                </div>`;
-                    $('.profile .latest-posts .posts-container').append(noPosts);
+                if (!data.post[0].hasOwnProperty('post_id'))
                     return;
-                }
                 appendAllPosts(data.post, 'profile');
             }
         },
@@ -214,10 +197,6 @@ const deleteComment = (postId, dateCreated, comment) => {
     });
 }
 $('.search-container input').on('keyup', function (e) {
-    if (!$(this).val()) {
-        $('.search-results').empty();
-        return;
-    }
     $.ajax({
         url: "api/get_allusers.php",
         type: "POST",
@@ -228,14 +207,6 @@ $('.search-container input').on('keyup', function (e) {
         success: function (data) {
             data = JSON.parse(data);
             $('.search-results').empty();
-            if (!data.user.length) {
-                let noResults = `<div class="my-5 py-5 mt-md-5 pt-md-5 d-flex flex-column align-items-center animateBottomToTop">
-                                    <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
-                                    <h5 class="font-weight-bold mt-3 mb-0">No users found.</h5>
-                                </div>`;
-                $('.search-results').append(noResults);
-                return;
-            }
             appendSearchResults(data);
             Array.from($('.result')).forEach((result, i) => {
                 setTimeout(() => {
@@ -293,15 +264,6 @@ const getAllNotificaitons = () => {
         cache: false,
         dataType: "json",
         success: function (data) {
-            console.log(data);
-            if (!data.length) {
-                let noNotifications = `<div class="d-flex flex-column align-items-center animateBottomToTop my-5 py-5 mt-md-5 pt-md-5 w-100">
-                                    <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
-                                    <h5 class="font-weight-bold mt-3 mb-0">No new notifications are available.</h5>
-                                </div>`;
-                $('.latest-notifications').append(noNotifications);
-                return;
-            }
             appendAllNotifications(data);
         },
         error: function (e) {

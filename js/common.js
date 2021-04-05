@@ -131,8 +131,6 @@ $('.nav-item').on('click', function (e) {
     }, 500);
   }
   if (previousActivePage == 'search' && $('.page.profile.active').data('page') && currentActivePage != 'profile') {
-    if (previousActivePage == currentActivePage)
-      $(`.${currentActivePage}`).addClass('active').removeClass('d-none');
     $('.page.profile').removeClass('active');
     setTimeout(() => {
       $('.page.profile').addClass('d-none');

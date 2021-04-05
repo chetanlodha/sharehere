@@ -15,9 +15,6 @@ if (!isset($_SESSION["sess_user"])) {
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/index.css">
-    <!-- <link rel="stylesheet" href="styles/splide-core.min.css"> -->
-    <link rel="stylesheet" href="styles/glider.min.css">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css">
     <title>Sharehere | Home</title>
   </head>
@@ -65,7 +62,6 @@ if (!isset($_SESSION["sess_user"])) {
   <!-- <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-pager.min.js"></script> -->
   <script src="js/lightgallery.min.js"></script>
   <script src="js/lg-zoom.min.js"></script>
-  <script src="js/glider.min.js"></script>
   <script src="js/api.js"></script>
   <script src="js/common.js"></script>
 

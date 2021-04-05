@@ -122,46 +122,12 @@
 .post .body .media {
   display: flex;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
-}
-.post .body .media .images{
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 10px;
+  /* scroll-snap-type: x mandatory; */
 }
 
-.post .body .media .images .image{
-  /* height: fit-content; */
-  width: fit-content;
-  height: 300px;
-  /* margin: auto; */
-  object-fit: contain;
-  flex: 1 1  auto;
-  border-radius: 7px;
-}
-
-.post .body .media .images::-webkit-scrollbar {
-  height: 5px;
-  /* width: 10px; */
-  /* width of the entire scrollbar */
-}
-
-.post .body .media .images::-webkit-scrollbar-track {
-  background: transparent;
-  /* body's scrollbar track color */
-}
-
-.post .body .media .images::-webkit-scrollbar-thumb {
-  background-color: rgb(121, 119, 190, 0.7);
-  border-radius: 30px;
-  border: 0;
-  /* controls body's scrollbar thumb */
-}
-
-.post .body .media .images .image:not(:last-child){
-  margin-right: 5px !important;
-}
+/* .post .body .media .images img{
+  scroll-snap-align: start;
+} */
 
 .post .body .media .images img:not(:first-child) {
   margin-left: 10px;
