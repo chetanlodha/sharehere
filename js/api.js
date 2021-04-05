@@ -40,9 +40,17 @@ const getAllPosts = () => {
         cache: false,
         success: function (data) {
             data = JSON.parse(data);
-            if (!data[0].hasOwnProperty('post_id'))
+            $('.home .latest-posts .posts-container').empty();
+            if (!data[0].hasOwnProperty('post_id')) {
+                let noPosts = `<div class="mt-2 mb-3 d-flex flex-column align-items-center animateBottomToTop">
+                                    <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
+                                    <h5 class="font-weight-bold mt-4">No posts available.</h5>
+                                    <span class="text-center text-muted">Get started by creating your first post or making friends.</span>
+                                </div>`;
+                $('.home .latest-posts .posts-container').append(noPosts);
                 return;
-            console.log(data);
+            }
+            console.log("Getting all posts", data);
             $('.home .latest-posts .posts-container').empty();
             appendAllPosts(data, 'home');
         },
@@ -86,8 +94,16 @@ const populateProfilePage = () => {
             $('.profile .latest-posts .posts-container').empty();
             if (data.profile_data.isFriend || profileId == currentUser) {
                 populateFriendsList(data.friends);
-                if (!data.post[0].hasOwnProperty('post_id'))
+                console.log(data.post[0].hasOwnProperty('post_id'));
+                if (!data.post[0].hasOwnProperty('post_id')) {
+                    let noPosts = `<div class="mt-2 mb-3 d-flex flex-column align-items-center animateBottomToTop">
+                                    <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
+                                    <h5 class="font-weight-bold mt-4">No posts available.</h5>
+                                    <span class="text-center text-muted">Get started by creating your first post.</span>
+                                </div>`;
+                    $('.profile .latest-posts .posts-container').append(noPosts);
                     return;
+                }
                 appendAllPosts(data.post, 'profile');
             }
         },
@@ -207,6 +223,14 @@ $('.search-container input').on('keyup', function (e) {
         success: function (data) {
             data = JSON.parse(data);
             $('.search-results').empty();
+            if (!data.user.length) {
+                let noResults = `<div class="my-5 py-5 mt-md-5 pt-md-5 d-flex flex-column align-items-center animateBottomToTop">
+                                    <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
+                                    <h5 class="font-weight-bold mt-4 mb-0">No users found.</h5>
+                                </div>`;
+                $('.search-results').append(noResults);
+                return;
+            }
             appendSearchResults(data);
             Array.from($('.result')).forEach((result, i) => {
                 setTimeout(() => {
@@ -264,6 +288,15 @@ const getAllNotificaitons = () => {
         cache: false,
         dataType: "json",
         success: function (data) {
+            console.log(data);
+            if (!data.length) {
+                let noNotifications = `<div class="d-flex flex-column align-items-center animateBottomToTop my-5 py-5 mt-md-5 pt-md-5 w-100">
+                                    <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
+                                    <h5 class="font-weight-bold mt-4 mb-0">No new notifications are available.</h5>
+                                </div>`;
+                $('.latest-notifications').append(noNotifications);
+                return;
+            }
             appendAllNotifications(data);
         },
         error: function (e) {

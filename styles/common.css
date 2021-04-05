@@ -335,6 +335,26 @@ textarea {
   transition: 0.3s ease;
 }
 
+.illustration{
+  max-height: 450px !important;
+  min-width: 300px !important;
+  max-width: 450px !important;
+}
+
+.animateBottomToTop {
+  animation: animateBottomToTop 1s ease;
+}
+
+@keyframes animateBottomToTop {
+  from {
+    transform: translateY(15px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+
 /* Small devices (mobiles, 576px and up) */
 
 /* @media (min-width: 576px) {
