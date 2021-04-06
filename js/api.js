@@ -213,6 +213,10 @@ const deleteComment = (postId, dateCreated, comment) => {
     });
 }
 $('.search-container input').on('keyup', function (e) {
+    if (!$(this).val()) {
+        $('.search-results').empty();
+        return;
+    }
     $.ajax({
         url: "api/get_allusers.php",
         type: "POST",
