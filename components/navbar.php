@@ -2,7 +2,13 @@
     <div class="navbar flex-column justify-content-between align-items-center h-100 pt-3 shadow-light">
         <div class="d-flex align-items-center order-1">
             <h3 class="nav-header font-weight-bold">Sharehere</h3>
-            <img class="profile-icon ml-3 d-md-none" src="./assets/user/profileImage.jpeg" id="toggleLogoutContainer" alt="User profile" />
+            <?php if (!$_SESSION['profile_picture']) {?>
+                <div class="bg-grey rounded-circle d-md-none">
+                    <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                </div>
+            <?php } else {?>
+                <img class="profile-icon ml-3 d-md-none" src="php/post/post/uploads/<?php echo $_SESSION['profile_picture'] ?>" id="toggleLogoutContainer" alt="User profile" />
+            <?php }?>
         </div>
         <ul class="nav-items d-flex flex-md-column mt-3 mt-md-0 mb-0 order-3 order-md-2">
             <li class="nav-item rounded ml-2 ml-md-0 mt-md-2 active" data-page="home">

@@ -45,10 +45,10 @@
     </div>
 </section>
 <section class="latest-posts">
-    <h4 class="font-weight-bold m-3">All posts</h4>
+    <h4 class="font-weight-bold ml-3 my-2">All posts</h4>
     <div class="posts-container d-flex flex-column"></div>
 </section>
-<section class="friends-container">
+<section class="friends-container animateBottomToTop">
     <div class="d-flex justify-content-between align-items-center">
         <h4 class="font-weight-bold m-3">Friends</h4>
         <img class="icons close-friends-tab mr-2" src="assets/icons/close-square.svg" alt="Close friends tab">

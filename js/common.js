@@ -4,7 +4,7 @@ let logoutContainer = $(".logoutContainer");
 let mobileBreakPoint = 767;
 
 window.onload = () => {
-  if (window.innerWidth < mobileBreakPoint) {
+  if (window.innerWidth <= mobileBreakPoint) {
     setDimensions(true);
     setNavbarScrollListener();
   } else {
@@ -14,12 +14,13 @@ window.onload = () => {
 }
 
 const onResize = () => {
+  console.log(window.innerWidth > mobileBreakPoint)
   if (window.innerWidth > mobileBreakPoint) {
     if (logoutContainer.hasClass("hidden"))
       logoutContainer.toggleClass("visible").toggleClass("hidden");
     setDimensions(false);
     if (isHideNavbarOnScrollActive) {
-      $(window).off();
+      $('.page').off();
       isHideNavbarOnScrollActive = false;
     }
   } else {
@@ -31,10 +32,12 @@ const onResize = () => {
       isHideNavbarOnScrollActive = true;
     }
   }
-  let aboutPosition = $('.profile-header .info .about').position();
-  aboutPosition = {
-    top: aboutPosition.top + 20,
-    left: aboutPosition.left + 20,
+  // let aboutPosition = $('.profile-header .info .about').offset();
+  // let left = $('.profile')
+  // console.log(aboutPosition);
+  let aboutPosition = {
+    top: $('.profile-header').outerHeight() - 20,
+    left: $('.profile-header').outerWidth()/2,
   }
   $('.profile-header .about-container').css('left', aboutPosition.left).css('top', aboutPosition.top);
 }
@@ -58,13 +61,13 @@ const setDimensions = (isMobile) => {
     isMobile
       ? {
         "padding": "0 0px 20px 0px",
-        "padding-top": getDimensions().navbar.height + 10,
+        "padding-top": getDimensions().navbar.height + 5,
       }
       : {
         "padding-top": "20px",
         "padding-bottom": "20px",
-        "padding-left": getDimensions().navbar.width + 20,
-        "padding-right": getDimensions().chatbarWidth + 20,
+        "padding-left": getDimensions().navbar.width + 30,
+        "padding-right": getDimensions().chatbarWidth + 30,
       }
   );
 };
@@ -74,12 +77,10 @@ const setDimensions = (isMobile) => {
 ********************************************/
 
 const setNavbarScrollListener = () => {
-  $(window).on('scroll', function () {
-    var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+  $('.page').on('scroll', function () {
+    var scrollY = document.querySelector('.page.active').pageYOffset || document.querySelector('.page.active').scrollTop;
 
-    scrollY >= this.lastScroll
-      ? nav.addClass('scrollUp')
-      : nav.delay(400).removeClass('scrollUp')
+    (scrollY >= this.lastScroll) ? nav.addClass('scrollUp') : nav.delay(400).removeClass('scrollUp')
 
     this.lastScroll = scrollY;
   });
@@ -87,33 +88,6 @@ const setNavbarScrollListener = () => {
 };
 
 $('.nav-item').on('click', function (e) {
-  // let navItems = Array.from($('.nav-item'));
-  // let newPage = $(this).data('page');
-  // let allPages = Array.from($('.main')[0].children);
-  // navItems.forEach(ele => {
-  //   let navItem = $(ele);
-  //   let index = navItem.index()
-  //   if (index != activePageIndex && navItem.hasClass('active'))
-  //     navItem.removeClass('active');
-  //   else if (index == activePageIndex) {
-  //     navItem.addClass('active');
-  //     if (navItem.data('page') == 'profile') {
-  //       prepareProfilePage(true);
-  //     }
-  //     if (navItem.data('page') == 'notifications') {
-  //       $('.latest-notifications').empty();
-  //       getAllNotificaitons();
-  //     }
-  //     if (navItem.data('page') == 'home') {
-  //       getAllPosts();
-  //     }
-  //     if (navItem.data('page') == 'search') {
-  //       $('.search-container input').val('');
-  //       $('.search-results').empty();
-  //     }
-  //   }
-  // })
-  // allPages.forEach(page => $(page).hasClass(newPage) ? $(page).show() : $(page).hide());
   const previousActiveNavItem = $('.nav-item.active');
   const previousActivePage = previousActiveNavItem.data('page');
   const currentActiveNavItem = $(this);
@@ -214,13 +188,18 @@ const appendPost = (post, page, i) => {
   time = date[4].split(':');
   time = `at ${(time[0] > 12) ? time[0] - 12 : time[0]}:${time[1]} ${(time[0] >= 12) ? 'pm' : 'am'}`;
   date = `${date[1]} ${date[2]} ${date[3]} ${time}`;
+  console.log(post.comments);
   if (post.media) {
-    imageClass = (post.media.length > 1) ? "" : "";
+    // imageClass = (post.media.length > 1) ? "" : "";
     post.media.forEach((ele, i) => {
       if (/jpg|jpeg|png/.test(ele))
-        images += `<img class="col-12 ${imageClass} img-fluid px-0" src="./php/post/post/${ele}" data-src="./php/post/post/${ele}">`;
+        images += `<img class="image img-fluid px-0 mx-auto" src="./php/post/post/${ele}" data-src="./php/post/post/${ele}" loading="lazy">`;
+      // images += `
+      // <div class="carousel-item ${i == 0 ? "active" : ""}">
+      // <img class="d-block w-100 image" src="./php/post/post/${ele}" data-src="./php/post/post/${ele}">
+      //                       </div>`;
       else
-        videos += `<video class="col-12 ${imageClass} px-0" src="./php/post/post/${ele}" controls controlsList="nodownload" preload="none"></video>`;
+        videos += `<video class="col-12 px-0" src="./php/post/post/${ele}" controls controlsList="nodownload" preload="none"></video>`;
     })
   }
   newPost = ` <div class="post rounded bg-white px-4 py-4" data-postid="${post.post_id}">
@@ -254,6 +233,19 @@ const appendPost = (post, page, i) => {
                           <div class="images d-flex col-12">
                               ${images}
                           </div>
+                          <!--<div id="carouselExampleControls" class="carousel slide images" data-ride="carousel">
+                            <div class="carousel-inner">
+                              ${images}
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Next</span>
+                            </a>
+                          </div> -->
                       </div>
                       <p class="d-inline-block text-truncate text-wrap my-2">
                           ${post.content}
@@ -282,6 +274,15 @@ const appendPost = (post, page, i) => {
 const setUpPostActions = (page) => {
   let post = `.post:first-child`;
   if ($(`.${page} ${post} .media .images img`).length > 0)
+    // new Glider(document.querySelector(`.${page} ${post} .images .glider`), {
+    //   slidesToShow: 1,
+    //   // dots: '#dots',
+    //   // draggable: true,
+    //   arrows: {
+    //     prev: `.${page} ${post} .media .images .glider-prev`,
+    //     next: `.${page} ${post} .media .images .glider-next`
+    //   }
+    // });
     $(`.${page} ${post} .images`).lightGallery({
       download: false
     });
@@ -294,10 +295,14 @@ const setUpPostActions = (page) => {
     setTimeout(() => {
       $(this).parents('.post').addClass('removePost');
     }, 10)
+    setTimeout(() => {
+      $(this).parents('.post').remove();
+    }, 800)
   })
 
   //Handle comments
   $(`.${page} ${post} .toggle-comments`).on('click', function (e) {
+    console.log($(this).parents('.post').children('.comments').hasClass('visible'));
     if (!$(this).parents('.post').children('.comments').hasClass('visible')) {
       $(this).parents('.post').find('.latest-comments').empty();
       $(this).parents('.post').children('.comments').addClass('visible');
@@ -354,16 +359,20 @@ const setUpCommentActions = (postId) => {
 ********************************************/
 
 const populateProfileHeader = (profile) => {
-  let aboutPosition = $('.profile-header .info .about').position();
+  // let aboutPosition = $('.profile-header .info .about').offset();
   let addFriend = $('.profile-header .row-2 .actions .add-friend');
   let requestSent = $('.profile-header .row-2 .actions .request-sent');
   let sendMessage = $('.profile-header .row-2 .actions .send-message');
   let removeFriend = $('.profile-header .row-2 .actions .remove-friend');
   let url = new URL(window.location.href);
   let profileId = url.searchParams.get('profile');
-  aboutPosition = {
-    top: aboutPosition.top + 40,
-    left: aboutPosition.left + 20,
+  // aboutPosition = {
+  //   top: aboutPosition.top + 40,
+  //   left: aboutPosition.left + 20,
+  // }
+  let aboutPosition = {
+    top: $('.profile-header').outerHeight() - 20,
+    left: $('.profile-header').outerWidth()/2,
   }
   $('.profile-header .row-1 h5 strong').text(profile.name);
   $('.profile-header .about-container').css('left', aboutPosition.left).css('top', aboutPosition.top);
