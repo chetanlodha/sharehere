@@ -1,4 +1,4 @@
-<div class="chatbar position-fixed flex-column align-items-center d-none d-md-flex p-3 text-center">
+<div class="chatbar position-fixed flex-column align-items-center d-md-none d-md-flex p-3 text-center">
     <h3 class="chatbar-header font-weight-bold">Users</h3>
     <div class="chat-users d-flex flex-column align-items-start flex-fill">
         <div class="chat-user">

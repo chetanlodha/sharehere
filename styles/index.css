@@ -25,7 +25,7 @@
   margin-top: 10px;
 }
 
-.chat-user img {
+.chatbar .chat-user img {
   height: 25px;
   width: 25px;
   object-fit: contain;
@@ -390,7 +390,7 @@
 
 /***********************************************/
 
-.search-container .form-control {
+.search .search-container .form-control {
   background-color: white !important;
 }
 
@@ -413,4 +413,90 @@
 
 .actions {
   position: relative;
+}
+/***************************************/
+
+/***************  CHAT  ***************/
+
+/***************************************/
+
+.page.chat {
+  padding: 0 !important;
+}
+
+.page.chat .chat-user{
+  justify-content: unset;
+}
+
+.page.chat .chat-list-container {
+  flex: 0 1 25%;
+}
+
+/* .page.chat .chat-window {
+  flex: q 1 70%;
+} */
+
+.chat-container{
+  position: absolute;
+  top:0;
+  right: 0;
+  bottom: 0;
+  left:0;
+  opacity: 0;
+  visibility: hidden;
+  z-index: -5;
+}
+.chat-container.visible{
+  opacity: 1;
+  visibility: visible;
+  z-index: 9999;
+}
+
+.chat-window .messages {
+  overflow-y: auto;
+  max-height: calc(100vh - 135px);
+}
+
+
+.chat-window .message.sent div{
+  width: fit-content;
+  background-color: rgb(97, 121, 183, 0.5);
+}
+
+.chat-window .message.received{
+  /* display: flex;
+  flex-direction: column; */
+  width: fit-content;
+}
+
+.chat-window .message .time {
+  position: relative;
+  top: 5px;
+  font-size: 0.65em;
+}
+
+.chat-window .message .time small{
+  line-height: 1;
+}
+
+.chat-window .messages::-webkit-scrollbar,.chat-list::-webkit-scrollbar {
+  width: 5px;
+  /* width: 10px; */
+  /* width of the entire scrollbar */
+}
+
+.chat-window .messages::-webkit-scrollbar-track,.chat-list::-webkit-scrollbar-track {
+  background: transparent;
+  /* body's scrollbar track color */
+}
+
+.chat-window .messages::-webkit-scrollbar-thumb,.chat-list::-webkit-scrollbar-thumb {
+  background-color: rgb(121, 119, 190, 0.7);
+  border-radius: 30px;
+  border: 0;
+  /* controls body's scrollbar thumb */
+}
+.chat-list-container .chat-list{
+  overflow-y: auto;
+  max-height: calc(100vh - 126px);
 }

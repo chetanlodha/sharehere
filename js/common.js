@@ -119,6 +119,7 @@ $('.nav-item').on('click', function (e) {
   const currentActiveNavItem = $(this);
   const currentActivePage = currentActiveNavItem.data('page');
   if (previousActivePage != currentActivePage) {
+
     currentActiveNavItem.addClass('active');
     previousActiveNavItem.removeClass('active');
     $(`.${currentActivePage}`).removeClass('d-none');
@@ -153,9 +154,16 @@ $('.nav-item').on('click', function (e) {
     case 'profile':
       prepareProfilePage();
       break;
+    case 'chat':
+      break;
     default:
       console.log('Page does not exists');
   }
+  if(currentActivePage == 'chat'){
+    $('.chat-container').addClass('visible');
+    // $('.chat').addClass('active').removeClass('d-none');
+  }
+  
   document.title = `Sharehere | ${$(this).children('span').text()}`;
   if (currentActivePage != 'profile') {
     const url = new URL(window.location); // Set new or modify existing parameter value.

@@ -271,6 +271,9 @@ button:focus {
 .rounded {
   border-radius: 15px !important;
 }
+.rounded-bottom {
+  border-radius: 0 0 15px 15px !important;
+}
 
 /***************************************/
 

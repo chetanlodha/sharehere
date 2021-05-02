@@ -21,6 +21,10 @@
                 <img src="assets/icons/nav-profile.svg" alt="Profile" />
                 <span class="d-none d-md-block ml-3">Profile</span>
             </li>
+            <li class="nav-item rounded ml-2 ml-md-0 mt-md-2" data-page="chat">
+                <img src="assets/icons/nav-profile.svg" alt="Chat" />
+                <span class="d-none d-md-block ml-3">Chat</span>
+            </li>
         </ul>
         <div class="logoutContainer hidden d-flex flex-row justify-content-center mt-4 mb-3 mb-md-3 mt-md-0 order-2 order-md-2">
 

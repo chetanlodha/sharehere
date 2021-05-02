@@ -38,6 +38,9 @@ if (!isset($_SESSION["sess_user"])) {
         <section class="page notifications d-none" data-page="notifications">
           <?php include('components/notifications.php') ?>
         </section>
+        <section class="page chat d-none" data-page="chat">
+          <?php include('components/chat.php') ?>
+        </section>
 
       </div>
 
