@@ -1,6 +1,8 @@
 
 $("#createPost").on('submit', function (e) {
     e.preventDefault();
+    if (!$('#createPost textarea').val())
+        return
     let form = $(this);
     let formData = new FormData(this);
     formData.append('action', 'create');
@@ -129,7 +131,12 @@ $('.profile-image-container input').on('change', function () {
             data: formdata,
             success: function (data) {
                 if (data.status = 201) {
-                    $(".logoutContainer .profile-icon").attr("src", `php/post/post/uploads/${data.image}`);
+                    if ($('.bg-grey.rounded-circle').length) {
+                        $('.bg-grey.rounded-circle').remove();
+                        $('.nav-header').append(`<img class="profile-icon ml-3 d-md-none" src="${data.image}" id="toggleLogoutContainer" alt="User profile" />`)
+                        $('.logoutContainer').prepend(`<img class="profile-icon d-none d-md-block" src="${data.image}" alt="User profile" />`)
+                    }
+                    $(".profile-icon").attr("src", `php/post/post/uploads/${data.image}`);
                     populateProfilePage();
                 } else {
                     alert(error);
@@ -294,10 +301,10 @@ const getAllNotificaitons = () => {
         success: function (data) {
             console.log(data);
             if (!data.length) {
-                let noNotifications = `<div class="d-flex flex-column align-items-center animateBottomToTop my-5 py-5 mt-md-5 pt-md-5 w-100">
-                                    <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
-                                    <h5 class="font-weight-bold mt-4 mb-0">No new notifications are available.</h5>
-                                </div>`;
+                let noNotifications = ` <div class="d-flex flex-column align-items-center animateBottomToTop my-5 py-5 mt-md-5 pt-md-5 w-100">
+                                            <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
+                                            <h5 class="font-weight-bold text-center mt-4 mb-0">No new notifications are available.</h5>
+                                        </div>`;
                 $('.latest-notifications').append(noNotifications);
                 return;
             }

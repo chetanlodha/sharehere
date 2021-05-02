@@ -1,6 +1,6 @@
 <section class="create-post mx-1 mx-md-0 p-4 bg-white rounded shadow-light">
     <form id="createPost" class="d-flex flex-row justify-content-between w-100" method="post" enctype="multipart/form-data">
-        <textarea name="content" rows="5" class="form-control w-100 mr-3 p-3" placeholder="What's on your mind?"></textarea>
+        <textarea name="content" rows="3" class="form-control w-100 mr-3 p-3" placeholder="What's on your mind?"></textarea>
         <div class="create-post-actions d-flex flex-column align-items-center">
             <div class="position-relative">
                 <img class="mt-2 icons" src="./assets/icons/tick-square.svg" alt="Creat post">
@@ -15,7 +15,7 @@
 </section>
 
 <section class="latest-posts">
-    <h4 class="font-weight-bold m-3">Latest posts</h4>
+    <h4 class="font-weight-bold ml-3 my-2">Latest posts</h4>
     <div class="posts-container d-flex flex-column">
     </div>
 </section>
