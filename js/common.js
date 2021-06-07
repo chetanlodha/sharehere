@@ -1,6 +1,5 @@
 let nav = $("nav");
 let isHideNavbarOnScrollActive = false;
-let logoutContainer = $(".logoutContainer");
 let mobileBreakPoint = 767;
 
 window.onload = () => {
@@ -8,36 +7,48 @@ window.onload = () => {
     setDimensions(true);
     setNavbarScrollListener();
   } else {
-    logoutContainer.toggleClass("visible").toggleClass("hidden");
+    $(".logoutContainer").addClass("visible").removeClass("hidden");
     setDimensions(false)
   }
+  notyf = new Notyf({
+    duration: 50000,
+    position: {
+      x: 'right',
+      y: 'top',
+    },
+    types: [
+      {
+        type: 'newMessage',
+        background: "#6179B7",
+        icon: false
+      }
+    ],
+    ripple: true,
+    dismissible: true
+  });
 }
 
 const onResize = () => {
-  console.log(window.innerWidth > mobileBreakPoint)
   if (window.innerWidth > mobileBreakPoint) {
-    if (logoutContainer.hasClass("hidden"))
-      logoutContainer.toggleClass("visible").toggleClass("hidden");
+    if ($(".logoutContainer").hasClass("hidden"))
+      $(".logoutContainer").addClass("visible").removeClass("hidden");
     setDimensions(false);
     if (isHideNavbarOnScrollActive) {
       $('.page').off();
       isHideNavbarOnScrollActive = false;
     }
   } else {
-    if (logoutContainer.hasClass("visible"))
-      logoutContainer.removeClass("visible").addClass("hidden");
+    if ($(".logoutContainer").hasClass("visible"))
+      $(".logoutContainer").removeClass("visible").addClass("hidden");
     setDimensions(true);
     if (!isHideNavbarOnScrollActive) {
       setNavbarScrollListener();
       isHideNavbarOnScrollActive = true;
     }
   }
-  // let aboutPosition = $('.profile-header .info .about').offset();
-  // let left = $('.profile')
-  // console.log(aboutPosition);
   let aboutPosition = {
     top: $('.profile-header').outerHeight() - 20,
-    left: $('.profile-header').outerWidth()/2,
+    left: $('.profile-header').outerWidth() / 2,
   }
   $('.profile-header .about-container').css('left', aboutPosition.left).css('top', aboutPosition.top);
 }
@@ -67,7 +78,7 @@ const setDimensions = (isMobile) => {
         "padding-top": "20px",
         "padding-bottom": "20px",
         "padding-left": getDimensions().navbar.width + 30,
-        "padding-right": getDimensions().chatbarWidth + 30,
+        "padding-right": getDimensions().chatbarWidth + 20,
       }
   );
 };
@@ -129,15 +140,18 @@ $('.nav-item').on('click', function (e) {
       prepareProfilePage();
       break;
     case 'chat':
+      $('nav').hide()
+      $('.chat-container').addClass('visible')
+      $('.chatbar').addClass('d-none')
       break;
     default:
       console.log('Page does not exists');
   }
-  if(currentActivePage == 'chat'){
-    $('.chat-container').addClass('visible');
-    // $('.chat').addClass('active').removeClass('d-none');
+  if (currentActivePage !== 'chat') {
+    $('nav').show()
+    $('.chatbar').removeClass('d-none')
   }
-  
+
   document.title = `Sharehere | ${$(this).children('span').text()}`;
   if (currentActivePage != 'profile') {
     const url = new URL(window.location); // Set new or modify existing parameter value.
@@ -166,7 +180,7 @@ const prepareProfilePage = (user = null) => {
 }
 
 $("#toggleLogoutContainer").on("click", () =>
-  logoutContainer.toggleClass("visible").toggleClass("hidden")
+  $(".logoutContainer").toggleClass("visible").toggleClass("hidden")
 );
 
 /*******************************************
@@ -380,7 +394,7 @@ const populateProfileHeader = (profile) => {
   // }
   let aboutPosition = {
     top: $('.profile-header').outerHeight() - 20,
-    left: $('.profile-header').outerWidth()/2,
+    left: $('.profile-header').outerWidth() / 2,
   }
   $('.profile-header .row-1 h5 strong').text(profile.name);
   $('.profile-header .about-container').css('left', aboutPosition.left).css('top', aboutPosition.top);
@@ -532,7 +546,7 @@ const appendSearchResults = (data) => {
                       </div>
                   </div>`;
     console.log(data.friends.includes(result.id), result.isAlreadySent);
-    $('.search-results').append(newResult);
+    $('.page.search .search-results').append(newResult);
     searchResultActions();
   })
 }
@@ -585,6 +599,126 @@ const setUpNotificationActions = () => {
     $(this).parents('.notification').remove();
   });
 }
+
+const appendChatUserInHome = friend => {
+  let chatUser = `<div class="chat-user" data-id="${friend.id}">
+                    ${(friend.profile_picture) ?
+      `<img class="profile-icon" src="php/post/post/uploads/${friend.profile_picture}" alt="User profile">`
+      :
+      `<div class="bg-grey rounded-circle">
+                            <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                        </div>`
+    }
+                    <span class="ml-2 text-left">${friend.name}</span>
+                  </div>`
+  $('.chat-users').append(chatUser);
+}
+
+const appendChatUserInChatList = friend => {
+  let chatUser = `<div class="chat-user d-flex align-items-center" data-id=${friend.id}>
+                    ${friend.profile_picture ?
+      `<img class="profile-icon" src="php/post/post/uploads/${friend.profile_picture}" alt="User profile">`
+      :
+      `<div class="bg-grey rounded-circle">
+                            <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                        </div>`
+    }
+                    <div class="ml-2 text-left">
+                        <span class="">${friend.name}</span>
+                        <p class="mb-0"><small></small></p>
+                    </div>
+                  </div>`
+  let chatWindow = `<div class="chat-window flex-column flex-fill mx-md-3" data-id="${friend.id}">
+                      <div class="header d-flex justify-content-between rounded-bottom py-3 px-2 shadow">
+                        <div class="d-flex align-items-center ml-3">
+                          ${friend.profile_picture ?
+      `<img class="profile-icon" src="php/post/post/uploads/${friend.profile_picture}" alt="User profile">`
+      :
+      ` <div class="bg-grey rounded-circle">
+                                  <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                                </div>`
+    }
+                          <div class="d-flex flex-column ml-2">
+                            <span class="user-name">${friend.name}</span>
+                            <span class="online mb-0">Online</span>
+                          </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                          <img class="icon closeChat mr-3 d-md-none" src="./assets/icons/close-square.svg" onclick="closeChat(this)" alt="Close chat" style="filter: invert(1) contrast(2)">
+                        </div>
+                      </div>
+                      <div class="messages d-flex flex-column justify-content-center flex-fill px-3 my-3">
+                        <div class="no-messages">
+                          <p class="text-center mb-0">No messages yet</p>
+                          <p class="text-center mb-0">Say Hello!</p>
+                        </div>
+                      </div>
+                      <div class="send-message-container d-flex align-items-center justify-content-between rounded-top py-2 px-2">
+                        <input class="form-control mr-2 px-3 w-100" type="text" name="search" placeholder="Type a message">
+                        <div class="sendMessage rounded" onclick="sendMessage(this)" data-id="${friend.id}">
+                          <img class="profile-icon-placeholder" src="assets/icons/message-send-chat.svg" alt="User profile">
+                        </div>
+                      </div>
+                    </div>`
+  $('.chat-container .chat-list').append(chatUser)
+  $('.chat-container').append(chatWindow)
+}
+
+const closeChat = (ref) => {
+  $(`.chat-list .chat-user.active, .chat-window.active`).removeClass('active')
+  if ($('.chat-window.active'))
+    $('.chat-window.default').addClass('active')
+}
+
+const sendMessage = (ref) => {
+  let receiverId = $(ref).attr('data-id')
+  let message = $(ref).prev().val()
+  if (message === '')
+    return
+  socket.emit('sendMessage', { "senderId": currentUser, "receiverId": receiverId, "message": message })
+  appendMessage({ "receiverId": receiverId, "message": message })
+  $(ref).prev().val('')
+}
+
+const appendMessage = (data, received = false) => {
+  let date = new Date()
+  let hours = date.getHours()
+  hours = hours > 12 ? hours - 12 : hours
+  let am_pm = hours >= 12 ? 'pm' : 'am'
+  let mins = date.getMinutes()
+  let newMessage = `<div class="message ${received ? 'received bg-grey px-3 py-2 mb-2' : 'sent d-flex justify-content-end mb-2'} rounded ">
+                      ${!received ? '<div class="rounded px-3 py-2">' : ''}
+                        <span>${data.message}</span>
+                        <span class="time w-100 ml-1">
+                            <small>
+                                ${hours}:${mins} ${am_pm}
+                            </small>
+                        </span>
+                      ${!received ? '</div' : ''}
+                    </div>`
+  if ($(`.chat-window[data-id=${$.escapeSelector(data.receiverId)}] .messages .message`))
+    $(`.chat-window[data-id=${$.escapeSelector(data.receiverId)}] .messages`).removeClass('justify-content-center').children('.no-messages').remove()
+  $(`.chat-window[data-id=${$.escapeSelector(data.receiverId)}] .messages`).append(newMessage)
+}
+
+socket.on('chat', data => {
+  appendMessage(data, true)
+  if ($(`.page.chat`).hasClass('active') && $(`.chat-list .chat-user[data-id=${$.escapeSelector(data.receiverId)}]`).hasClass('active'))
+    return
+  let name = $(`.chat-window[data-id=${$.escapeSelector(data.receiverId)}] .user-name`).text()
+  const notification = notyf.open({
+    type: 'newMessage',
+    message: `New message from ${name}`,
+  })
+  notification.on('click', ({ target, event }) => {
+    console.log('clicked')
+    if (!$('.page.chat').hasClass('active'))
+      $('.nav-item[data-page=chat]').click()
+    $(`.chat-list .chat-user[data-id=${$.escapeSelector(data.receiverId)}]`).click()
+    notyf.dismiss(notification);
+  })
+})
+
 /*******************************************
 *************** MISCELLANEOUS ***************
 ********************************************/

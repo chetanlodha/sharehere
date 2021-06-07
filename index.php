@@ -10,12 +10,15 @@ if (!isset($_SESSION["sess_user"])) {
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="styles/notyf.min.css">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/index.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="styles/lightgallery.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css"> -->
     <title>Sharehere | Home</title>
   </head>
 
@@ -53,16 +56,21 @@ if (!isset($_SESSION["sess_user"])) {
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> -->
     <script src="js/jquery-3.5.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/socket.io.min.js"></script>
   </body>
 
   <script>
     var currentUser = btoa('<?php echo $_SESSION['sess_id'] ?>');
+    let socket = io("http://localhost:3000");
+    let notyf;
+    socket.emit('newUser', currentUser);
   </script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-zoom.min.js"></script> -->
-  <!-- OPTIONAL -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-fullscreen.min.js"></script> -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-pager.min.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script> -->
+  <script src="js/notyf.min.js"></script>
   <script src="js/lightgallery.min.js"></script>
   <script src="js/lg-zoom.min.js"></script>
   <script src="js/api.js"></script>

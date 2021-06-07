@@ -353,4 +353,37 @@ const acceptNotification = (friend_id) => {
     });
 }
 
+const getAllFriends = () => {
+    $.ajax({
+        url: `php/post/profile_post.php`,
+        type: "GET",
+        data: { id: currentUser },
+        cache: false,
+        success: function (data) {
+            data = JSON.parse(data)[0];
+            if (!data.friends.length) {
+                $('.chat-users').append('No friends');
+                return;
+            }
+            data.friends.forEach(friend => {
+                friend.id = btoa(friend.id)
+                appendChatUserInHome(friend)
+                appendChatUserInChatList(friend)
+            })
+            onResize()
+            $('.chat-user').on('click', function () {
+                let id = $(this).data('id')
+                $('.chat-list .chat-user.active, .chat-window.active').removeClass('active')
+                if ($(this).parents('.chatbar').length)
+                    $('.nav-item[data-page=chat]').click()
+                $(`.chat-list .chat-user[data-id=${$.escapeSelector(id)}], .chat-window[data-id=${$.escapeSelector(id)}]`).addClass('active')
+            })
+        },
+        error: function () {
+            alert("Failed to populate chat list");
+        }
+    });
+}
+
 getAllPosts();
+getAllFriends();

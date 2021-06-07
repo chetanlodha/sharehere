@@ -34,11 +34,43 @@ html {
   }
 
   .chatbar {
-    max-width: 200px !important;
+    display: none !important;
   }
 
   .post:not(:first-child) {
     margin-top: 10px !important;
+  }
+
+  .page.chat .chat-list-container {
+    flex: 0 1 100% !important;
+  }
+
+  .chat-window {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #f5f5f5;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease;
+    animation: animatePageTransitionOut 0.5s ease;
+  }
+
+  .chat-window.active {
+    opacity: 1;
+    visibility: visible;
+    animation: animatePageTransitionIn 0.5s ease;
+  }
+
+  .chat-window.default.active {
+    display: none !important;
+  }
+
+  .notyf__toast{
+    max-width: 85vw;
+    font-size: smaller;
   }
 }
 
@@ -267,6 +299,21 @@ button:focus {
 
 /***************************************/
 
+/************* NOTIFICATION ************/
+
+/***************************************/
+
+.notyf__toast{
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.notyf__toast--upper {
+  margin: 10px !important;
+}
+
+/***************************************/
+
 /******BOOTSTRAP CLASSES OVERRIDE ******/
 
 /***************************************/
@@ -274,8 +321,13 @@ button:focus {
 .rounded {
   border-radius: 15px !important;
 }
+
 .rounded-bottom {
   border-radius: 0 0 15px 15px !important;
+}
+
+.rounded-top {
+  border-radius: 15px 15px 0 0 !important;
 }
 
 /***************************************/
