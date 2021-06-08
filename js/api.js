@@ -14,16 +14,14 @@ $("#createPost").on('submit', function (e) {
         processData: false,
         cache: false,
         success: function (data) {
-            if (data == 'invalid') {
-                alert('Invalid file!');
-            }
+            notyf.success("Post created");
             console.log(data);
             data = JSON.parse(data);
             console.log(data);
             if (!data.hasOwnProperty('post_id'))
                 return
             console.log('post');
-            appendPost(data, 'home');
+            appendPost(data, 'home', 1);
             setUpPostActions('home');
             $('.post:first-child').addClass('animatePost shadow-light');
             form.children('textarea').val('');
@@ -62,6 +60,35 @@ const getAllPosts = () => {
     });
 }
 
+const updatePost = (id) => {
+    let val = $(`.post[data-postid=${id}] .update-post textarea`).html();
+    $.ajax({
+        url: 'php/post/post.php',
+        type: "POST",
+        data: {
+            action: 'update',
+            post_id: id,
+            content: val
+        },
+        cache: false,
+        success: function (data) {
+            data = JSON.parse(data)
+            let date;
+            let time;
+            date = data.last_updated.split(' ');
+            time = date[4].split(':');
+            time = `at ${(time[0] > 12) ? time[0] - 12 : time[0]}:${time[1]} ${(time[0] >= 12) ? 'pm' : 'am'}`;
+            date = `${date[1]} ${date[2]} ${date[3]} ${time}`;
+            $(`.post[data-postid=${id}] .current-user span`).html(date);
+            $(`.post[data-postid=${id}] .content`).html(val);
+            notyf.success("Post updated");
+        },
+        error: function (e) {
+            alert("Failed to get profile details!");
+        }
+    })
+}
+
 const deletePost = (postId) => {
     let data = {
         action: 'delete',
@@ -81,6 +108,68 @@ const deletePost = (postId) => {
     });
 }
 
+const getLikes = id => {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'php/post/like.php',
+            type: "POST",
+            data: {
+                "action": "get_likes",
+                "post_id": id
+            },
+            cache: false,
+            success: res => {
+                res = JSON.parse(res)
+                resolve(res)
+            },
+            error: error => {
+                notyf.error({ "message": "Failed to get likes" })
+                console.log(error)
+            }
+        })
+    })
+}
+
+const likePost = (id, ref) => {
+    $.ajax({
+        url: 'php/post/like.php',
+        type: "POST",
+        data: {
+            "action": "like",
+            "post_id": id
+        },
+        cache: false,
+        success: () => {
+            let currentValue = parseInt($(ref).next().text())
+            $(ref).next().text(currentValue + 1)
+        },
+        error: error => {
+            notyf.error({ "message": "Failed to like post" })
+            console.log(error)
+        }
+    })
+}
+
+const unlikePost = (id, ref) => {
+    $.ajax({
+        url: 'php/post/like.php',
+        type: "POST",
+        data: {
+            "action": "unlike",
+            "post_id": id
+        },
+        cache: false,
+        success: () => {
+            let currentValue = parseInt($(ref).next().text())
+            $(ref).next().text(currentValue - 1)
+        },
+        error: error => {
+            notyf.error({ "message": "Failed to like post" })
+            console.log(error)
+        }
+    })
+}
+
 const populateProfilePage = () => {
     let url = new URL(window.location.href);
     let profileId = url.searchParams.get('profile');
@@ -96,7 +185,6 @@ const populateProfilePage = () => {
             $('.profile .latest-posts .posts-container').empty();
             if (data.profile_data.isFriend || profileId == currentUser) {
                 populateFriendsList(data.friends);
-                console.log(data.post[0].hasOwnProperty('post_id'));
                 if (!data.post[0].hasOwnProperty('post_id')) {
                     let noPosts = `<div class="mt-2 mb-3 d-flex flex-column align-items-center animateBottomToTop">
                                     <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
@@ -106,8 +194,10 @@ const populateProfilePage = () => {
                     $('.profile .latest-posts .posts-container').append(noPosts);
                     return;
                 }
+                $('.page.profile .latest-posts h4').show()
                 appendAllPosts(data.post, 'profile');
-            }
+            } else
+                $('.page.profile .latest-posts h4').hide()
         },
         error: function (e) {
             alert("Failed to get profile details!");
@@ -233,6 +323,7 @@ $('.search-container input').on('keyup', function (e) {
         cache: false,
         success: function (data) {
             data = JSON.parse(data);
+            console.log(data)
             $('.search-results').empty();
             if (!data.user.length) {
                 let noResults = `<div class="my-5 py-5 mt-md-5 pt-md-5 d-flex flex-column align-items-center animateBottomToTop">
@@ -248,7 +339,6 @@ $('.search-container input').on('keyup', function (e) {
                     $(result).addClass('visible');
                 }, (i + 1) * 150)
             })
-            console.log(data);
         },
         error: function (e) {
             alert(`Failed to remove comment!`);
@@ -283,6 +373,7 @@ const removeFriend = (friend_id) => {
         cache: false,
         dataType: "json",
         success: function (data) {
+            $(`.chat-user[data-id=${$.escapeSelector(btoa(friend_id))}], .chat-window[data-id=${$.escapeSelector(btoa(friend_id))}]`).remove()
             console.log(data);
         },
         error: function (e) {
@@ -301,11 +392,7 @@ const getAllNotificaitons = () => {
         success: function (data) {
             console.log(data);
             if (!data.length) {
-                let noNotifications = ` <div class="d-flex flex-column align-items-center animateBottomToTop my-5 py-5 mt-md-5 pt-md-5 w-100">
-                                            <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
-                                            <h5 class="font-weight-bold text-center mt-4 mb-0">No new notifications are available.</h5>
-                                        </div>`;
-                $('.latest-notifications').append(noNotifications);
+                appendEmptyNotificationBanner();
                 return;
             }
             appendAllNotifications(data);
@@ -344,7 +431,7 @@ const acceptNotification = (friend_id) => {
         cache: false,
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            getAllFriends();
         },
         error: function (e) {
             alert(`Failed to send req!`);
@@ -373,10 +460,7 @@ const getAllFriends = () => {
             onResize()
             $('.chat-user').on('click', function () {
                 let id = $(this).data('id')
-                $('.chat-list .chat-user.active, .chat-window.active').removeClass('active')
-                if ($(this).parents('.chatbar').length)
-                    $('.nav-item[data-page=chat]').click()
-                $(`.chat-list .chat-user[data-id=${$.escapeSelector(id)}], .chat-window[data-id=${$.escapeSelector(id)}]`).addClass('active')
+                onChatUserClicked(id);
             })
         },
         error: function () {
@@ -384,6 +468,7 @@ const getAllFriends = () => {
         }
     });
 }
+
 
 getAllPosts();
 getAllFriends();

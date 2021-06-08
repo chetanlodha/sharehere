@@ -40,6 +40,10 @@ html {
   .post:not(:first-child) {
     margin-top: 10px !important;
   }
+  
+  .profile-header {
+    animation: unset !important;
+  }
 
   .page.chat .chat-list-container {
     flex: 0 1 100% !important;
@@ -56,6 +60,7 @@ html {
     visibility: hidden;
     transition: opacity 0.5s ease;
     animation: animatePageTransitionOut 0.5s ease;
+    height: 93vh !important;
   }
 
   .chat-window.active {
@@ -71,6 +76,30 @@ html {
   .notyf__toast{
     max-width: 85vw;
     font-size: smaller;
+  }
+
+  @keyframes animatePageTransitionIn {
+    from {
+      transform: translateX(15px);
+    }
+    to{
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes animatePageTransitionOut {
+    from {
+      transform: translateX(0);
+    }
+    to{
+      transform: translateX(-15px);
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .scrollUp {
+    transform: translateY(0) !important;
   }
 }
 
@@ -282,6 +311,10 @@ button:focus {
   box-shadow: none !important;
 }
 
+.form-control.error{
+  border: 1px solid red !important;
+}
+
 /***************************************/
 
 /**************** LINK *****************/
@@ -303,6 +336,10 @@ button:focus {
 
 /***************************************/
 
+.notyf {
+  padding: 0 20px 20px 20px !important;
+}
+
 .notyf__toast{
   border-radius: 15px;
   cursor: pointer;
@@ -310,6 +347,10 @@ button:focus {
 
 .notyf__toast--upper {
   margin: 10px !important;
+}
+
+.notyf__ripple {
+  width: 130% !important;
 }
 
 /***************************************/
@@ -419,26 +460,10 @@ textarea {
 } */
 
 /* Medium devices (tablets, 768px and up) */
-
+/* 
 @media (max-width: 768px) {
-  @keyframes animatePageTransitionIn {
-    from {
-      transform: translateX(15px);
-    }
-    to{
-      transform: translateX(0);
-    }
-  }
-  
-  @keyframes animatePageTransitionOut {
-    from {
-      transform: translateX(0);
-    }
-    to{
-      transform: translateX(-15px);
-    }
-  }
-}
+
+} */
 
 /* Large devices (desktops, 992px and up) */
 

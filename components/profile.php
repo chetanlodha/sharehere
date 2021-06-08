@@ -20,27 +20,63 @@
             <div class="info d-flex align-items-center ml-md-2">
                 <span class="about" onclick="$('.about-container').addClass('visible')">About</span>
                 <span class="friends">Friends</span>
-                <span class="photos">Photos</span>
+                <!-- <span class="photos">Photos</span> -->
             </div>
             <div class="actions d-flex flex-wrap">
-                <img class="icons hidden add-friend" src="assets/icons/profile-addFriend.svg" alt="Add Friend">
+                <img class="icons hidden add-friend" src="assets/icons/profile-addFriend-bold.svg" alt="Add Friend">
                 <img class="icons hidden request-sent" src="assets/icons/request-sent.svg" alt="Request Sent">
                 <img class="icons hidden remove-friend" src="assets/icons/profile_friend.svg" alt="Remove Friend">
                 <img class="icons hidden send-message" src="assets/icons/message-send-bold.svg" alt="Send message">
             </div>
-            <div class="confirmRemoveFriend hidden">
+            <div class="confirmRemoveFriend hidden shadow-light">
                 <span>Are you sure you want to remove?</span>
                 <img class="icons" src="assets/icons/tick-square.svg" alt="Confirm remove friend">
             </div>
         </div>
     </div>
     <div class="about-container p-3">
-        <div class="d-flex justify-content-between pt-2">
-            <h4 class="font-weight-bold ml-4">About</h4>
-            <div class="mr-1">
-                <img class="icons" src="assets/icons/edit-square.svg" alt="Edit profile">
+        <div class="header d-flex justify-content-between pt-2 px-3">
+            <h4 class="font-weight-bold">About</h4>
+            <div class="">
+                <img class="icons" src="assets/icons/tick-square-filled.svg" alt="Edit profile">
                 <img class="icons ml-2" src="assets/icons/close-square.svg" alt="Close about" onclick="$(this).parents('.about-container').removeClass('visible')">
             </div>
+        </div>
+        <div class="info px-4 mt-1">
+            <form class="row flex-wrap" id="updateProfileForm">
+                <div class="col d-flex flex-column">
+                    <div class="form-group" style="--order: 1">
+                        <label for="name">Name</label>
+                        <input class="form-control" type="text" name="name">
+                    </div>
+                    <div class="form-group" style="--order: 3">
+                        <label for="email">Email</label>
+                        <input class="form-control" type="email" name="email">
+                    </div>
+                    <div class="form-group" style="--order: 5">
+                        <label for="state">State</label>
+                        <input class="form-control" type="text" name="state">
+                    </div>
+                    <div class="form-group" style="--order: 7">
+                        <label for="dob">Date of birth</label>
+                        <input class="form-control" type="date" name="dob">
+                    </div>
+                </div>
+                <div class="col d-flex flex-column">
+                    <div class="form-group" style="--order: 2">
+                        <label for="city">City</label>
+                        <input class="form-control" type="text" name="city">
+                    </div>
+                    <div class="form-group" style="--order: 4">
+                        <label for="password">Password</label>
+                        <input class="form-control" type="password" name="password">
+                    </div>
+                    <div class="form-group" style="--order: 6">
+                        <label for="confirm-password">Confirm password</label>
+                        <input class="form-control" type="password" name="confirm-password">
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </section>

@@ -87,7 +87,6 @@ if ($_POST['action'] == 'create') {
 	$last_updated = $date_now;
 	$query = "UPDATE `post` SET `content` = '$content',`last_updated` = '$last_updated' WHERE `post_id` = '$post_id'";
 	if ($result = mysqli_query($link, $query)) {
-		$data['content'] = $content;
 		$data['last_updated'] = $last_updated;
 		$data['status'] = 201;
 		echo json_encode($data);

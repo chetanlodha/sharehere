@@ -10,8 +10,8 @@
   right: 0;
   background-color: white;
   border-radius: 15px 0 0 15px;
-  min-height: 100vh;
-  max-width: 200px;
+  height: 100vh;
+  width: 200px;
 }
 
 .chat-user {
@@ -87,13 +87,10 @@
 .post {
   position: relative;
   opacity: 0;
+  transform: translateY(15px);
   will-change: transform, opacity;
   transition: 0.3s ease;
-}
-
-.animatePost {
-  opacity: 1;
-  animation: animate 1s ease;
+  animation: animate 1s ease calc(var(--order) * 200ms) forwards;
 }
 
 .removePost {
@@ -111,14 +108,9 @@
 }
 
 @keyframes animate {
-  from {
-    transform: translateY(15px);
-    opacity: 0;
-  }
-
   to {
-    transform: translateY(0);
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -128,6 +120,24 @@
 
 .post .current-user div span {
   font-size: smaller;
+}
+
+.post .update-post{
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: scale(0.7);
+  opacity: 0;
+  z-index: -1;
+  transition: transform 0.5s ease, opacity 0.5s ease ;
+}
+
+.post .update-post.visible {
+  transform: scale(1);
+  opacity: 1;
+  z-index: 11;
+  animation: animateUpdatePost 1s ease forwards;
 }
 
 .post .header .post-actions {
@@ -204,6 +214,22 @@
 .post .footer div img,
 .post .footer span {
   cursor: pointer;
+}
+
+.post .like.animate {
+  animation: animateLike 0.5s ease;
+}
+
+@keyframes animateLike {
+  0% {
+    transform: rotate(0deg) scale(1) translateY(0);
+  }
+  50% {
+    transform: rotate(-10deg) scale(1.1) translateY(-5px);
+  }
+  100% {
+    transform: rotate(0deg) scale(1) translateY(0);
+  }
 }
 
 .comments {
@@ -348,14 +374,8 @@
   transition: 0.7s ease;
   border-radius: 50%;
   will-change: transform;
-}
-
-.profile-header .about-container * {
-  opacity: 0;
-}
-
-.profile-header .about-container.visible * {
-  opacity: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .profile-header .about-container.visible {
@@ -372,13 +392,44 @@
   transition: 0.7s ease;
 }
 
+@media (min-width: 768px) and (max-width: 835px) {
+  .profile-header .about-container .header,
+  .profile-header .about-container .col,
+  .profile-header .about-container .info {
+    padding-left: 0.5em !important;
+    padding-right: 0.5em !important;
+  }
+}
+
+.profile-header .about-container .col {
+  min-width: 250px;
+}
+
+.profile-header .about-container .form-group{
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.profile-header .about-container.visible .form-group{
+  animation: animateFormControl 0.5s ease calc(var(--order) * 100ms + 600ms) forwards;
+}
+
+@keyframes animateFormControl {
+  to{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
 .friends-container {
   display: none;
 }
 
 .friend {
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .friends-list .col .friend:not(:first-child) {
@@ -409,7 +460,7 @@
   top: -35px;
   right: 25px;
   padding: 10px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 15px;
   transform: translateY(-15px);
   transition: 0.4s ease;
@@ -629,26 +680,24 @@
   line-height: 1;
 }
 
-.chat-window .messages::-webkit-scrollbar,
-.chat-list::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 5px;
   /* width: 10px; */
   /* width of the entire scrollbar */
 }
 
-.chat-window .messages::-webkit-scrollbar-track,
-.chat-list::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   background: transparent;
   /* body's scrollbar track color */
 }
 
-.chat-window .messages::-webkit-scrollbar-thumb,
-.chat-list::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background-color: rgb(121, 119, 190, 0.7);
   border-radius: 30px;
   border: 0;
   /* controls body's scrollbar thumb */
 }
+
 .chat-list-container .chat-list {
   overflow-y: auto;
   height: calc(100vh - 126px);

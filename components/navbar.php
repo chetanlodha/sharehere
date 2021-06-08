@@ -28,7 +28,7 @@
                 <span class="d-none d-md-block ml-3">Profile</span>
             </li>
             <li class="nav-item rounded ml-2 ml-md-0 mt-md-2" data-page="chat">
-                <img src="assets/icons/nav-profile.svg" alt="Chat" />
+                <img src="assets/icons/nav-chat.svg" alt="Chat" />
                 <span class="d-none d-md-block ml-3">Chat</span>
             </li>
         </ul>

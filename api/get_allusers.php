@@ -14,7 +14,7 @@ if (isset($_SESSION['sess_id']) && isset($_POST['keyword'])) {
     $keyword = mysqli_real_escape_string($link, $_POST['keyword']);
     // $keyword = "nancy";
 
-    $result = mysqli_query($link, "SELECT `name` , `profile_picture`, `id` FROM `users` WHERE (`id` != '$sess_id') && (`name` like '%$keyword%')");
+    $result = mysqli_query($link, "SELECT `name` , `profile_picture`, `id`, `state`, `city` FROM `users` WHERE (`id` != '$sess_id') && (`name` like '%$keyword%')");
     // print_r();
     $friendresult = mysqli_query($link, "SELECT * FROM `friends` WHERE (`user_id` = '$sess_id' OR `friend_id` = '$sess_id')");
 
@@ -28,6 +28,8 @@ if (isset($_SESSION['sess_id']) && isset($_POST['keyword'])) {
             $users[$i]['id'] = $row['id'];
             $users[$i]['name'] = $row['name'];
             $users[$i]['profile_picture'] = $row['profile_picture'];
+            $users[$i]['state'] = $row['state'];
+            $users[$i]['city'] = $row['city'];
 
             $notification = mysqli_query($link, "SELECT `receiver_id` FROM `friend_requests` where `sender_id` = '$sess_id' ");
             while ($row1 = $notification->fetch_array(MYSQLI_ASSOC)) {

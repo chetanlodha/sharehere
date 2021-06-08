@@ -40,6 +40,8 @@ if(isset($_GET['id']))
         $data_user['date_of_birth']=$row['date_of_birth'];
 		$data_user['email']=$row['email'];
 		$data_user['name'] = $row['name'];
+		$data_user['state'] = $row['state'];
+		$data_user['city'] = $row['city'];
 		$data_user['profile_picture'] = $row['profile_picture'];
 		$data_user['isFriend'] = (mysqli_fetch_all($friendresult)) ? true : false;
 		$data_user['hasNotification'] = (mysqli_fetch_all($notification)) ? true : false;

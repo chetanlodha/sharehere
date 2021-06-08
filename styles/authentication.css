@@ -23,6 +23,3 @@ body{
     color: #6179B7;
 }
 
-.form-control.error{
-    border: 1px solid red !important;
-}

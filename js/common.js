@@ -11,7 +11,7 @@ window.onload = () => {
     setDimensions(false)
   }
   notyf = new Notyf({
-    duration: 50000,
+    duration: 5000,
     position: {
       x: 'right',
       y: 'top',
@@ -103,8 +103,8 @@ $('.nav-item').on('click', function (e) {
   const previousActivePage = previousActiveNavItem.data('page');
   const currentActiveNavItem = $(this);
   const currentActivePage = currentActiveNavItem.data('page');
-  if (previousActivePage != currentActivePage) {
 
+  if (previousActivePage != currentActivePage) {
     currentActiveNavItem.addClass('active');
     previousActiveNavItem.removeClass('active');
     $(`.${currentActivePage}`).removeClass('d-none');
@@ -116,6 +116,7 @@ $('.nav-item').on('click', function (e) {
       $(`.${previousActivePage}`).addClass('d-none');
     }, 500);
   }
+
   if (previousActivePage == 'search' && $('.page.profile.active').data('page') && currentActivePage != 'profile') {
     if (previousActivePage == currentActivePage)
       $(`.${currentActivePage}`).addClass('active').removeClass('d-none');
@@ -124,6 +125,7 @@ $('.nav-item').on('click', function (e) {
       $('.page.profile').addClass('d-none');
     }, 500);
   }
+
   switch (currentActivePage) {
     case 'home':
       getAllPosts();
@@ -152,12 +154,18 @@ $('.nav-item').on('click', function (e) {
     $('.chatbar').removeClass('d-none')
   }
 
-  document.title = `Sharehere | ${$(this).children('span').text()}`;
   if (currentActivePage != 'profile') {
     const url = new URL(window.location); // Set new or modify existing parameter value.
     url.searchParams.delete('profile');
     window.history.pushState({}, '', url); // Replace current querystring with the new one.
+    $('.friends-container').hide()
+    $('.page.profile .latest-posts').show()
   }
+
+  $('.confirmRemoveFriend').addClass('hidden')
+
+  document.title = `Sharehere | ${$(this).children('span').text()}`;
+
 })
 
 const prepareProfilePage = (user = null) => {
@@ -198,113 +206,98 @@ const appendAllPosts = (data, page) => {
   })
 }
 
-const appendPost = (post, page, i) => {
+const appendPost = async (post, page, i) => {
   let newPost;
   let postContainer = $(`.${page} .posts-container`);
   let date;
   let time;
-  let imageClass;
   let images = "";
   let videos = "";
   date = post.last_updated.split(' ');
   time = date[4].split(':');
   time = `at ${(time[0] > 12) ? time[0] - 12 : time[0]}:${time[1]} ${(time[0] >= 12) ? 'pm' : 'am'}`;
   date = `${date[1]} ${date[2]} ${date[3]} ${time}`;
-  console.log(post.comments);
-  if (post.media) {
-    // imageClass = (post.media.length > 1) ? "" : "";
-    post.media.forEach((ele, i) => {
-      if (/jpg|jpeg|png/.test(ele))
-        images += `<img class="image img-fluid px-0 mx-auto" src="./php/post/post/${ele}" data-src="./php/post/post/${ele}" loading="lazy">`;
-      // images += `
-      // <div class="carousel-item ${i == 0 ? "active" : ""}">
-      // <img class="d-block w-100 image" src="./php/post/post/${ele}" data-src="./php/post/post/${ele}">
-      //                       </div>`;
-      else
-        videos += `<video class="col-12 px-0" src="./php/post/post/${ele}" controls controlsList="nodownload" preload="none"></video>`;
-    })
-  }
-  newPost = ` <div class="post rounded bg-white px-4 py-4" data-postid="${post.post_id}">
-                  <div class="header d-flex flex-row justify-content-between position-relative">
-                      <div class="info d-flex">
-                          ${(post.profile_picture) ?
-      `<img class="profile-icon" src="php/post/post/uploads/${post.profile_picture}" alt="User profile">`
-      :
-      ` <div class="bg-grey rounded-circle">
-                                <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
-                              </div>`
+  getLikes(post.post_id).then(likes => {
+    let isLiked = likes.includes(atob(currentUser));
+
+    if (post.media) {
+      post.media.forEach((ele, i) => {
+        if (/jpg|jpeg|png/.test(ele))
+          images += `<img class="image img-fluid px-0 mx-auto" src="./php/post/post/${ele}" data-src="./php/post/post/${ele}" loading="lazy">`;
+        else
+          videos += `<video class="col-12 px-0" src="./php/post/post/${ele}" controls controlsList="nodownload" preload="none" loading="lazy">></video>`;
+      })
     }
-                          <div class="current-user ml-2">
-                              <div>
-                                  <h6 class="mb-0">${post.name}</h6>
-                                  <span class="text-muted">${date}</span>
-                              </div>
-                          </div>
+    newPost = ` <div class="post position-relative rounded bg-white shadow-light px-4 py-4" data-postid="${post.post_id}" data-userid=${btoa(post.userid)} style="--order: ${i + 1}">
+                    <div class="update-post position-absolute d-flex flex-column rounded bg-white px-4 py-4">
+                      <div class="d-flex justify-content-end">
+                        <img class="icons" src="assets/icons/tick-square-filled.svg" alt="Update post" onclick="updatePost('${post.post_id}')">
+                        <img class="icons ml-2" src="assets/icons/close-square.svg" alt="Close about" onclick="$(this).parents('.update-post').removeClass('visible')">
                       </div>
-                      <img class="icons" src="./assets/icons/overflow-menu.svg" alt="Post actions" 
-                      onClick="$(this).next().toggleClass('visible')"/>
-                      <div class="post-actions d-flex flex-column p-3 rounded shadow">
-                          <span class="edit">Edit post</span>
-                          <hr class="my-2">
-                          <span class="delete">Delete post</span>
-                      </div>
-                  </div>
-                  <div class="body mx-0 mx-md-2 my-2">
-                      <div class="media">
-                          ${videos}
-                          <div class="images d-flex col-12">
-                              ${images}
-                          </div>
-                          <!--<div id="carouselExampleControls" class="carousel slide images" data-ride="carousel">
-                            <div class="carousel-inner">
-                              ${images}
+                      <textarea class="form-control flex-fill shadow mt-3 p-4">${post.content}</textarea>
+                    </div>
+                    <div class="header d-flex flex-row justify-content-between position-relative">
+                        <div class="info d-flex">
+                            ${(post.profile_picture) ?
+        `<img class="profile-icon" src="php/post/post/uploads/${post.profile_picture}" alt="User profile">`
+        :
+        ` <div class="bg-grey rounded-circle">
+                                  <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                                </div>`
+      }
+                            <div class="current-user ml-2">
+                                <div>
+                                    <h6 class="mb-0">${post.name}</h6>
+                                    <span class="text-muted">${date}</span>
+                                </div>
                             </div>
-                            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                              <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                              <span class="sr-only">Next</span>
-                            </a>
-                          </div> -->
-                      </div>
-                      <p class="d-inline-block text-truncate text-wrap my-2">
-                          ${post.content}
-                      </p>
-                  </div>
-                  <div class="footer d-flex justify-content-between mx-2">
-                      <div class="d-flex justify-content-center align-items-center">
-                          <img src="./assets/icons/thumb-up.svg" alt="Like post" />
-                          <span class="ml-2">${post.likes}</span>
-                      </div>
-                      <span class="toggle-comments">${post.comments} comments</span>
-                  </div>
-                  <div class="comments">
-                      <div class="create-comment d-flex justify-content-between align-items-center w-100">
-                          <textarea class="form-control p-2 px-3" rows=1 placeholder="Write a comment..."></textarea> 
-                          <img class="icons ml-2" src="./assets/icons/tick-square.svg" alt="Creat post">
-                      </div>
-                      <div class="latest-comments"></div>
-                      <hr>
-                  </div>       
-              </div>`;
-  postContainer.prepend(newPost);
-  setUpPostActions(page);
+                        </div>
+                        ${btoa(post.user_id) === currentUser ?
+        `<img class="icons" src="./assets/icons/overflow-menu.svg" alt="Post actions" 
+                          onClick="$(this).next().toggleClass('visible')"/>
+                          <div class="post-actions d-flex flex-column p-3 rounded shadow">
+                              <span class="edit" onclick="$(this).parents('.post').children('.update-post').addClass('visible'); $(this).parent().removeClass('visible')">Edit post</span>
+                              <hr class="my-2">
+                              <span class="delete">Delete post</span>
+                          </div>` : ''
+      }
+                        
+                    </div>
+                    <div class="body mx-0 mx-md-2 my-2">
+                        <div class="media">
+                            ${videos}
+                            <div class="images d-flex col-12">
+                                ${images}
+                            </div>
+                        </div>
+                        <p class="content d-inline-block text-truncate text-wrap my-2">
+                            ${post.content}
+                        </p>
+                    </div>
+                    <div class="footer d-flex justify-content-between mx-2">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <img class="icons ${isLiked ? 'liked' : ''} like" src="./assets/icons/${isLiked ? 'thumb-up-filled' : 'thumb-up'}.svg" alt="Like post" />
+                            <span class="ml-2">${post.likes}</span>
+                        </div>
+                        <span class="toggle-comments">${post.comments} comments</span>
+                    </div>
+                    <div class="comments">
+                        <div class="create-comment d-flex justify-content-between align-items-center w-100">
+                            <textarea class="form-control p-2 px-3" rows=1 placeholder="Write a comment..."></textarea> 
+                            <img class="icons ml-2" src="./assets/icons/tick-square.svg" alt="Creat post">
+                        </div>
+                        <div class="latest-comments"></div>
+                        <hr>
+                    </div>       
+                </div>`;
+    postContainer.prepend(newPost);
+    setUpPostActions(page);
+  })
 }
 
 const setUpPostActions = (page) => {
   let post = `.post:first-child`;
   if ($(`.${page} ${post} .media .images img`).length > 0)
-    // new Glider(document.querySelector(`.${page} ${post} .images .glider`), {
-    //   slidesToShow: 1,
-    //   // dots: '#dots',
-    //   // draggable: true,
-    //   arrows: {
-    //     prev: `.${page} ${post} .media .images .glider-prev`,
-    //     next: `.${page} ${post} .media .images .glider-next`
-    //   }
-    // });
     $(`.${page} ${post} .images`).lightGallery({
       download: false
     });
@@ -320,6 +313,31 @@ const setUpPostActions = (page) => {
     setTimeout(() => {
       $(this).parents('.post').remove();
     }, 800)
+  })
+
+  $(`.${page} ${post} .like`).on('click', function (e) {
+    let post = $(this).parents('.post')
+    let postId = post.data("postid")
+    let userId = post.data('userid')
+    let button = $(this)
+    if (!button.hasClass('liked')) {
+      likePost(postId, this)
+      if (button.hasClass('animate'))
+        setTimeout(() => {
+          button.removeClass('animate')
+        }, 5)
+      button.attr('src', './assets/icons/thumb-up-filled.svg').addClass('animate liked')
+    }
+    else {
+      unlikePost(postId, this)
+      button.attr('src', './assets/icons/thumb-up.svg').removeClass('animate liked')
+      setTimeout(() => {
+        button.addClass('animate')
+      }, 5)
+      setTimeout(() => {
+        button.removeClass('animate')
+      }, 500)
+    }
   })
 
   //Handle comments
@@ -381,17 +399,14 @@ const setUpCommentActions = (postId) => {
 ********************************************/
 
 const populateProfileHeader = (profile) => {
-  // let aboutPosition = $('.profile-header .info .about').offset();
+  console.log(profile)
   let addFriend = $('.profile-header .row-2 .actions .add-friend');
   let requestSent = $('.profile-header .row-2 .actions .request-sent');
   let sendMessage = $('.profile-header .row-2 .actions .send-message');
   let removeFriend = $('.profile-header .row-2 .actions .remove-friend');
+  let friendListToggle = $('.profile-header .row-2 .info .friends');
   let url = new URL(window.location.href);
   let profileId = url.searchParams.get('profile');
-  // aboutPosition = {
-  //   top: aboutPosition.top + 40,
-  //   left: aboutPosition.left + 20,
-  // }
   let aboutPosition = {
     top: $('.profile-header').outerHeight() - 20,
     left: $('.profile-header').outerWidth() / 2,
@@ -406,26 +421,30 @@ const populateProfileHeader = (profile) => {
     $('.profile .profile-image').hide().attr('src', ` `);
   }
   if (profileId == currentUser) {
-    if (!removeFriend.hasClass('hidden'))
-      removeFriend.addClass('hidden');
-    if (!addFriend.hasClass('hidden'))
-      addFriend.addClass('hidden');
-    if (!requestSent.hasClass('hidden'))
-      requestSent.addClass('hidden');
-    if (!sendMessage.hasClass('hidden'))
-      sendMessage.addClass('hidden');
+    $('.about-container input[name=name]').val(profile.name)
+    $('.about-container input[name=email]').val(profile.email)
+    $('.about-container input[name=dob]').val(profile.date_of_birth)
+    $('.about-container input[name=state]').val(profile.state)
+    $('.about-container input[name=city]').val(profile.city)
+    removeFriend.addClass('hidden');
+    addFriend.addClass('hidden');
+    requestSent.addClass('hidden');
+    sendMessage.addClass('hidden');
+    friendListToggle.show()
     $('.profile-header .profile-image-container .icons').show();
   } else {
     $('.profile-header .profile-image-container .icons').hide();
     if (!profile.isFriend) {
+      friendListToggle.hide()
+      removeFriend.addClass('hidden');
       if (!profile.hasNotification)
         addFriend.removeClass('hidden');
     }
     else {
-      if (sendMessage.hasClass('hidden'))
-        sendMessage.removeClass('hidden');
-      if (removeFriend.hasClass('hidden'))
-        removeFriend.removeClass('hidden');
+      sendMessage.removeClass('hidden');
+      removeFriend.removeClass('hidden');
+      requestSent.addClass('hidden');
+      friendListToggle.show()
     }
 
     if (profile.hasNotification)
@@ -434,30 +453,37 @@ const populateProfileHeader = (profile) => {
 }
 
 const populateFriendsList = (data) => {
-  console.log(data);
+  console.log(data, "updating friends")
   $('.friends-container .friends-list .col1').empty();
   $('.friends-container .friends-list .col2').empty();
   let count = (data.length == 1) ? 1 : data.length / 2;
+  let url = new URL(window.location.href);
+  let id = url.searchParams.get('profile');
   data.forEach((friend, i) => {
     let newFriends = `<div class="friend d-flex justify-content-between align-items-center bg-white rounded shadow-light p-3" data-friendid="${friend.id}">
                         <div class="d-flex align-items-center">
-                        ${(friend.profile_picture) ?
+                          ${(friend.profile_picture) ?
         `<img class="profile-icon" src="php/post/post/uploads/${friend.profile_picture}" alt="User profile">`
         :
         ` <div class="bg-grey rounded-circle">
-                              <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
-                            </div>`
+                                                  <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
+                                                </div>`
       }
                           <span class="ml-2">${friend.name}</span>
                         </div>
-                        <div class="confirmRemoveFriend d-flex flex-wrap justify-content-between align-items-center bg-white rounded shadow-light hidden">
-                          <span>Are you sure you want to remove?</span>
-                          <div>
-                            <img class="icons remove" src="assets/icons/tick-square.svg" alt="Confirm remove friend">
-                            <img class="icons close-confirmRemoveFriend ml-2" src="assets/icons/close-square.svg" alt="Confirm remove friend">
+                        ${id == currentUser ?
+        `
+                          <div class="confirmRemoveFriend d-flex flex-wrap justify-content-between align-items-center bg-white rounded shadow hidden">
+                            <span>Are you sure you want to remove?</span>
+                            <div>
+                              <img class="icons remove" src="assets/icons/tick-square.svg" alt="Confirm remove friend">
+                              <img class="icons close-confirmRemoveFriend ml-2" src="assets/icons/close-square.svg" alt="Confirm remove friend">
+                            </div>
                           </div>
-                        </div>
-                        <img class="icons remove-friend" src="assets/icons/profile_friend.svg" alt="Remove Friend">
+                          <img class="icons remove-friend" src="assets/icons/profile_friend.svg" alt="Remove Friend">`
+        : ''
+      }
+                        
                       </div>`
     $(`.friends-container .friends-list .${(i < count || data.length == 1) ? "col1" : "col2"}`).append(newFriends);
     setUpFriendsListAction((i < count || data.length == 1));
@@ -466,13 +492,12 @@ const populateFriendsList = (data) => {
 const setUpFriendsListAction = (checkColumn) => {
   $(`.friends-container .friends-list .${checkColumn ? "col1" : "col2"} .friend:last-child .remove-friend`).on("click", function (e) {
     let confirm = $(this).prev();
-    if (confirm.hasClass('hidden'))
-      confirm.removeClass('hidden');
-    else
-      confirm.addClass('hidden');
+    confirm.toggleClass('hidden');
   });
   $(`.friends-container .friends-list .${checkColumn ? "col1" : "col2"} .friend:last-child .confirmRemoveFriend .remove`).on("click", function (e) {
-    removeFriend($(this).parents('.friend').data("friendid"));
+    let id = $(this).parents('.friend').data("friendid");
+    removeFriend(id);
+    socket.emit('removeFriend', { "senderId": currentUser, "receiverId": btoa(id) })
     $(this).parents('.friend').remove();
   });
   $(`.friends-container .friends-list .${checkColumn ? "col1" : "col2"} .friend:last-child .confirmRemoveFriend .close-confirmRemoveFriend`).on("click", function (e) {
@@ -484,6 +509,7 @@ $('.profile-header .row-2 .actions .add-friend').on('click', function (e) {
   let url = new URL(window.location.href);
   let profileId = atob(url.searchParams.get('profile'));
   sendFriendRequest(profileId);
+  socket.emit('newFriendRequest', { "receiverId": profileId })
   $(this).addClass('hidden').next().removeClass('hidden');
 });
 
@@ -494,18 +520,19 @@ $('.profile-header .row-2 .actions .request-sent').on('click', function (e) {
   $(this).addClass('hidden').prev().removeClass('hidden');
 });
 
-$('.profile-header .row-2 .actions .remove-friend').on('click', function (e) {
-  let confirm = $('.confirmRemoveFriend');
-  if (confirm.hasClass('hidden'))
-    confirm.removeClass('hidden')
-  else
-    confirm.addClass('hidden')
+$('.profile-header .row-2 .actions .send-message').on('click', function (e) {
+  let url = new URL(window.location.href);
+  let id = url.searchParams.get('profile');
+  onChatUserClicked(id)
 });
+
+$('.profile-header .row-2 .actions .remove-friend').on('click', () => $('.confirmRemoveFriend').toggleClass('hidden'));
 
 $('.profile-header .confirmRemoveFriend img').on('click', function (e) {
   let url = new URL(window.location.href);
   let profileId = atob(url.searchParams.get('profile'));
   removeFriend(profileId);
+  socket.emit('removeFriend', { "senderId": currentUser, "receiverId": btoa(id) })
   $(this).parent().addClass('hidden');
   $('.profile-header .row-2 .actions .remove-friend').addClass('hidden').siblings('.add-friend').removeClass('hidden');
 });
@@ -524,7 +551,8 @@ $('.profile .friends-container .close-friends-tab').on('click', function (e) {
 const appendSearchResults = (data) => {
   let newResult;
   data.user.forEach(result => {
-    newResult = ` <div class="result d-flex flex-wrap justify-content-between align-items-center bg-white rounded shadow-light p-3 m-2">
+    let isFriend = data.friends.includes(result.id)
+    newResult = ` <div class="result d-flex flex-wrap justify-content-between align-items-center bg-white rounded shadow-light p-3 m-2" data-isfriend=${isFriend}>
                       <div class="info d-flex" data-userid="${result.id}">
                       ${(result.profile_picture) ?
         `<img class="profile-icon" src="php/post/post/uploads/${result.profile_picture}" alt="User profile">`
@@ -536,16 +564,15 @@ const appendSearchResults = (data) => {
                        
                           <div class="d-flex flex-column ml-2">
                               <span class="name">${result.name}</span>
-                              <small><span class="city">Firozabad, Uttar Pradesh</span></small>
+                              <small><span class="city">${result.city}, ${result.state}</span></small>
                           </div>
                       </div>
                       <div class="actions d-flex">
-                          <img class="icons ${(data.friends.includes(result.id)) ? `hidden` : (result.isAlreadySent) ? 'hidden' : ''} add-friend" src="assets/icons/profile-addFriend.svg" alt="">
+                          <img class="icons ${isFriend ? `hidden` : (result.isAlreadySent) ? 'hidden' : ''} add-friend" src="assets/icons/profile-addFriend.svg" alt="">
                           <img class="icons ${(result.isAlreadySent) ? `` : `hidden`} request-sent" src="assets/icons/request-sent.svg" alt="">
-                          <img class="icons ml-2" src="assets/icons/message-send.svg" alt="">
+                          <img class="icons ${isFriend ? `` : (result.isAlreadySent) ? 'hidden' : ''} send-message ml-2" src="assets/icons/message-send.svg" alt="">
                       </div>
                   </div>`;
-    console.log(data.friends.includes(result.id), result.isAlreadySent);
     $('.page.search .search-results').append(newResult);
     searchResultActions();
   })
@@ -556,16 +583,25 @@ const searchResultActions = () => {
     prepareProfilePage($(this).data('userid'));
   });
   $('.search-results .result:last-child .actions .add-friend').on('click', function (e) {
-    sendFriendRequest($(this).parents('.result').children('.info').attr('data-userid'));
+    let id = $(this).parents('.result').children('.info').attr('data-userid')
+    socket.emit('newFriendRequest', { "receiverId": btoa(id) })
+    sendFriendRequest(id);
     $(this).addClass('hidden').next().removeClass('hidden');
   });
   $('.search-results .result:last-child .actions .request-sent').on('click', function (e) {
-    declineNotification($(this).parents('.result').children('.info').attr('data-userid'));
+    let id = $(this).parents('.result').children('.info').attr('data-userid')
+    declineNotification(id);
     $(this).addClass('hidden').prev().removeClass('hidden');
+  });
+  $('.search-results .result:last-child .actions .send-message').on('click', function (e) {
+    let id = $(this).parents('.result').children('.info').attr('data-userid')
+    onChatUserClicked(btoa(id))
   });
 }
 
 const appendAllNotifications = (data) => {
+  if (!$('.latest-notifications .notification'))
+    $('.latest-notifications').empty()
   data.forEach(notification => {
     let newNotification = `  <div class="notification shadow-light bg-white rounded m-1 col d-flex flex-wrap align-items-center p-3">
                                 <div class="info d-flex align-items-center">
@@ -576,7 +612,7 @@ const appendAllNotifications = (data) => {
                                                       <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
                                                     </div>`
       }
-                                    <span class="ml-2">${notification.name}</span>
+                                    <span class="name ml-2">${notification.name}</span>
                                 </div>
                                 <div class="actions d-flex justify-content-center p-1" data-userid="${notification.id}">
                                     <button class="btn btn-green accept">Accept</button>
@@ -592,16 +628,40 @@ const appendAllNotifications = (data) => {
 const setUpNotificationActions = () => {
   $('.notification:last-child .actions .decline').on('click', function (e) {
     declineNotification($(this).parent().data('userid'));
+    if ($('.notification').length == 1)
+      appendEmptyNotificationBanner();
     $(this).parents('.notification').remove();
   });
   $('.notification:last-child .actions .accept').on('click', function (e) {
-    acceptNotification($(this).parent().data('userid'));
+    let id = $(this).parent().data('userid')
+    let name = $(this).parents('.notification').find('.name').text()
+    acceptNotification(id);
+    socket.emit('newFriend', { "senderId": currentUser, "receiverId": btoa(id), "name": name })
+    if ($('.notification').length == 1)
+      appendEmptyNotificationBanner();
     $(this).parents('.notification').remove();
   });
 }
 
+const appendEmptyNotificationBanner = () => {
+  let noNotifications = ` <div class="d-flex flex-column align-items-center animateBottomToTop my-5 py-5 mt-md-5 pt-md-5 w-100">
+                                            <img class="col-12 col-md-6 illustration" src="assets/illustrations/noPosts.svg">
+                                            <h5 class="font-weight-bold text-center mt-4 mb-0">No new notifications are available.</h5>
+                                        </div>`;
+  $('.latest-notifications').append(noNotifications);
+}
+
+const onChatUserClicked = (id) => {
+  $('.chat-list .chat-user.active, .chat-window.active').removeClass('active')
+  if ($(this).parents('.chatbar'))
+    $('.nav-item[data-page=chat]').click()
+  $(`.chat-list .chat-user[data-id=${$.escapeSelector(id)}], .chat-window[data-id=${$.escapeSelector(id)}]`).addClass('active')
+}
+
 const appendChatUserInHome = friend => {
-  let chatUser = `<div class="chat-user" data-id="${friend.id}">
+  if (!$('.chat-user'))
+    $('.chat-users, .chat-list').empty()
+  let chatUser = `<div class="chat-user justify-content-start w-100" data-id="${friend.id}">
                     ${(friend.profile_picture) ?
       `<img class="profile-icon" src="php/post/post/uploads/${friend.profile_picture}" alt="User profile">`
       :
@@ -711,13 +771,27 @@ socket.on('chat', data => {
     message: `New message from ${name}`,
   })
   notification.on('click', ({ target, event }) => {
-    console.log('clicked')
     if (!$('.page.chat').hasClass('active'))
       $('.nav-item[data-page=chat]').click()
     $(`.chat-list .chat-user[data-id=${$.escapeSelector(data.receiverId)}]`).click()
     notyf.dismiss(notification);
   })
 })
+
+socket.on('newFriendRequest', data => {
+  const notification = notyf.success('You have a new friend request')
+  notification.on('click', () => $('.nav-item[data-page=notification]').click())
+})
+
+socket.on('newFriend', data => {
+  notyf.success(`${data.name} accepted your friend request`)
+  data.senderId = atob(data.senderId)
+  $(`.search-results .result .info[data-userid=${data.senderId}]`).parents('.result').find('.request-sent').addClass('hidden')
+  $('.profile-header .add-friend').addClass('hidden')
+  getAllFriends()
+})
+
+socket.on('friendRemoved', data => $(`.chat-user[data-id=${$.escapeSelector(data.senderId)}], .chat-window[data-id=${$.escapeSelector(data.senderId)}]`).remove())
 
 /*******************************************
 *************** MISCELLANEOUS ***************
