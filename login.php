@@ -14,6 +14,7 @@ if (isset($_SESSION['sess_id']) && isset($_SESSION['sess_user'])) {
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/notyf.min.css">
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/authentication.css">
     <title>Sharehere | Login</title>
@@ -50,11 +51,12 @@ if (isset($_SESSION['sess_id']) && isset($_SESSION['sess_user'])) {
     </div>
 
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
+      <!-- <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script> -->
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
     integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
     crossorigin="anonymous"></script> -->
     <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/notyf.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script>
       function validateEmail() {
@@ -70,47 +72,46 @@ if (isset($_SESSION['sess_id']) && isset($_SESSION['sess_user'])) {
 
       $('form').on('submit', function(e) {
         e.preventDefault();
-        // alert('helo');
-        var error = "";
+        const notyf = new Notyf({
+          duration: 5000,
+          position: {
+            x: 'right',
+            y: 'top',
+          },
+          ripple: true,
+          dismissible: true,
+          icon: false
+        })
+        let error = "<ul>";
 
-        if (validateEmail()) {
+        if (!validateEmail())
+          error = error + '<li>Invalid email</li>';
+        if ($("#password").val() == "")
+          error = error + '<li>Password cannot be empty</li>';
+        error += "</ul>"
 
-        } else {
-          // $("#email").css("border-color","red");
-          error = error + 'email';
+
+        if (error !== "<ul></ul>") {
+          notyf.error(error)
+          return
         }
 
-        if ($("#password").val() == "") {
-          // $("#password").css("border-color","red");
-          error = error + 'password';
-        } else {
-
-        }
-
-        if (error == "") {
-
-          $.ajax({
-            type: 'POST',
-            url: 'php/loginProcess.php',
-            dataType: "json",
-            data: {
-              email: $("#email").val(),
-              password: $("#password").val()
-            },
-            success: function(data) {
-              console.log('form');
-              if (data.status == 201) {
-                window.location = "index.php";
-              } else if (data.status == 301) {
-                alert(data.error);
-
-              }
-
-            }
-          });
-        } else {
-
-        }
+        $.ajax({
+          type: 'POST',
+          url: 'php/loginProcess.php',
+          dataType: "json",
+          data: {
+            email: $("#email").val(),
+            password: $("#password").val()
+          },
+          success: function(data) {
+            if (data.status == 201)
+              window.location = "index.php";
+            else
+              notyf.error(data.error);
+          },
+          error: data => notyf.error(data.error)
+        })
       });
     </script>
   </body>

@@ -1,25 +1,37 @@
 /* primary: 6179B7 */
 /* primary-rgb: rgb(97, 121, 183, 1) */
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-    background-color: white !important;
+body {
+  background-color: white !important;
 }
 
-.container{
-    min-height: 100vh;
+.container {
+  min-height: 100vh;
 }
 
-.container .authentication img{
-    object-fit: contain;
+.container .authentication img {
+  object-fit: contain;
 }
 
-.container .authentication p span{
-    color: #6179B7;
+.container .authentication p span {
+  color: #6179b7;
 }
 
+.notyf__ripple {
+  width: 130% !important;
+  height: 280% !important;
+}
+
+/* .notyf__message {
+    left: 15px !important;
+} */
+
+.notyf__icon--error {
+    display: none !important;
+}

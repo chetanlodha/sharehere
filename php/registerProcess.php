@@ -22,14 +22,14 @@ if(isset($_POST)){
     $token =bin2hex(random_bytes(15));
     $testEmail = preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email);
     if(!$testEmail){
-        $data['error'] = 'Invalid Email'; 
+        $data['error'] = 'Invalid email'; 
         $data['status']  = 501;
     }else{
         $result = mysqli_query($link, "SELECT * FROM `users` WHERE `email` = '$email'");
 
         if (mysqli_num_rows($result) !=0 ) { 
             $data['status'] = 301;
-            $data['error'] = 'This Email ID is already registered';
+            $data['error'] = 'User already exists';
          
         }else{
             $query = "INSERT INTO `users` (`name`, `email`, `password`,`state`,`city`,`profile_picture`,`date_of_birth`,`token`, `date`, `from_ip`, `from_browser`) 
