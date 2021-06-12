@@ -196,14 +196,13 @@ $("#toggleLogoutContainer").on("click", () =>
 ********************************************/
 
 const appendAllPosts = (data, page) => {
-  data.forEach((post, i) => {
-    appendPost(post, page, i)
-  });
-  Array.from($(`.${page} .posts-container .post`)).forEach((post, i) => {
-    setTimeout(() => {
-      $(post).addClass('animatePost shadow-light');
-    }, i * 200)
-  })
+  let length = data.length
+  data.forEach((post, i) => appendPost(post, page, length-i-1));
+  // Array.from($(`.${page} .posts-container .post`)).forEach((post, i) => {
+  //   setTimeout(() => {
+  //     $(post).addClass('animatePost shadow-light');
+  //   }, i * 200)
+  // })
 }
 
 const appendPost = async (post, page, i) => {
@@ -531,10 +530,10 @@ $('.profile-header .row-2 .actions .remove-friend').on('click', () => $('.confir
 $('.profile-header .confirmRemoveFriend img').on('click', function (e) {
   let url = new URL(window.location.href);
   let profileId = atob(url.searchParams.get('profile'));
-  removeFriend(profileId);
-  socket.emit('removeFriend', { "senderId": currentUser, "receiverId": btoa(id) })
   $(this).parent().addClass('hidden');
   $('.profile-header .row-2 .actions .remove-friend').addClass('hidden').siblings('.add-friend').removeClass('hidden');
+  removeFriend(profileId);
+  socket.emit('removeFriend', { "senderId": currentUser, "receiverId": btoa(profileId) })
 });
 
 $('.profile-header .row-2 .info .friends').on('click', function (e) {
@@ -662,8 +661,6 @@ const onChatUserClicked = (id) => {
 }
 
 const appendChatUserInHome = friend => {
-  if (!$('.chat-user'))
-    $('.chat-users, .chat-list').empty()
   let chatUser = `<div class="chat-user justify-content-start w-100" data-id="${friend.id}">
                     ${(friend.profile_picture) ?
       `<img class="profile-icon" src="php/post/post/uploads/${friend.profile_picture}" alt="User profile">`
@@ -783,6 +780,8 @@ socket.on('chat', data => {
 
 socket.on('newFriendRequest', data => {
   const notification = notyf.success('You have a new friend request')
+  if ($('.page.notifications.active').length)
+    $('.nav-item[data-page=notifications]').click()
   notification.on('click', () => $('.nav-item[data-page=notification]').click())
 })
 

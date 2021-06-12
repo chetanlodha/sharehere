@@ -376,6 +376,8 @@ const removeFriend = (friend_id) => {
         dataType: "json",
         success: function (data) {
             $(`.chat-user[data-id=${$.escapeSelector(btoa(friend_id))}], .chat-window[data-id=${$.escapeSelector(btoa(friend_id))}]`).remove()
+            if(!$('.chat-user').length)
+                $('.chat-users, .chat-list').html('<p class="text-center animateGrow opacity-50 mt-2">No friends yet</p>')
             console.log(data);
         },
         error: function (e) {
@@ -451,9 +453,11 @@ const getAllFriends = () => {
         success: function (data) {
             data = JSON.parse(data)[0];
             if (!data.friends.length) {
-                $('.chat-users').append('No friends');
+                $('.chat-users, .chat-list').html('<p class="text-center animateGrow opacity-50 mt-2">No friends yet</p>');
                 return;
             }
+            $('.chat-users, .chat-list').empty()
+            $('.chat-window').not($('.chat-window.default')[0]).remove()
             data.friends.forEach(friend => {
                 friend.id = btoa(friend.id)
                 appendChatUserInHome(friend)
