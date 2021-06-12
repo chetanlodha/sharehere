@@ -1,8 +1,10 @@
 
 $("#createPost").on('submit', function (e) {
     e.preventDefault();
-    if (!$('#createPost textarea').val())
+    if (!$('#createPost textarea').val() && !$('#createPost input')[0].files.length){
+        notyf.error("Cannot create empty post");
         return
+    }
     let form = $(this);
     let formData = new FormData(this);
     formData.append('action', 'create');
@@ -24,8 +26,8 @@ $("#createPost").on('submit', function (e) {
             appendPost(data, 'home', 1);
             setUpPostActions('home');
             $('.post:first-child').addClass('animatePost shadow-light');
-            form.children('textarea').val('');
-            form.find('input').val('');
+            form.find('textarea, input').val('');
+            form.find('.attachment-indicator').removeClass('visible');
         },
         error: function (e) {
             alert("Failed to create post!");

@@ -8,7 +8,8 @@
             </div>
             <div class="position-relative">
                 <img class="mt-2 ml-1 icons" src="./assets/icons/add-image.svg" alt="Add media to post" onclick="$(this).next().click()">
-                <input class="d-none" type="file" name="image[]" multiple>
+                <input class="d-none" type="file" name="image[]" multiple onchange="$(this).next().addClass('visible')">
+                <div class="attachment-indicator position-absolute"></div>
             </div>
         </div>
     </form>

@@ -70,6 +70,21 @@
 
 /************************************************/
 
+#createPost .attachment-indicator{
+  top: 50%;
+  right: -10px;
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background-color: #6179B7;
+  transform: scale(0);
+  transition: transform 0.5s ease;
+}
+
+#createPost .attachment-indicator.visible{
+  transform: scale(1);
+}
+
 .create-post-actions div button,
 .create-post-actions div input,
 .invisible-button {

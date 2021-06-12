@@ -612,7 +612,10 @@ const appendAllNotifications = (data) => {
                                                       <img class="profile-icon-placeholder" src="assets/icons/profile-user.svg" alt="User profile" />
                                                     </div>`
       }
-                                    <span class="name ml-2">${notification.name}</span>
+                                  <div class="d-flex flex-column ml-2">
+                                    <span class="name">${notification.name}</span>
+                                    <small><span class="city">${notification.city}, ${notification.state}</span></small>
+                                  </div>
                                 </div>
                                 <div class="actions d-flex justify-content-center p-1" data-userid="${notification.id}">
                                     <button class="btn btn-green accept">Accept</button>

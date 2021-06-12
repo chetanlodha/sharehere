@@ -60,7 +60,7 @@ html {
     visibility: hidden;
     transition: opacity 0.5s ease;
     animation: animatePageTransitionOut 0.5s ease;
-    height: 93vh !important;
+    /* height: 93vh !important; */
   }
 
   .chat-window.active {

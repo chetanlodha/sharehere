@@ -12,7 +12,7 @@ if (isset($_SESSION['sess_id'])) {
     //$row = $result -> fetch_all();
     while ($row = mysqli_fetch_assoc($result)) {
         $sender_id = $row['sender_id'];
-        $sql = "SELECT `name` , `profile_picture` , `id` FROM `users` WHERE `id` = '$sender_id'";
+        $sql = "SELECT `name`, `profile_picture`, `id`, `state`, `city` FROM `users` WHERE `id` = '$sender_id'";
         $user_fetch = mysqli_query($link, $sql);
         $user = $user_fetch->fetch_assoc();
         // print_r($user);
