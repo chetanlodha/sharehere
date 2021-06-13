@@ -743,8 +743,8 @@ const sendMessage = (ref) => {
 const appendMessage = (data, received = false) => {
   let date = new Date()
   let hours = date.getHours()
-  hours = hours > 12 ? hours - 12 : hours
   let am_pm = hours >= 12 ? 'pm' : 'am'
+  hours = hours > 12 ? hours - 12 : hours
   let mins = date.getMinutes()
   let newMessage = `<div class="message ${received ? 'received bg-grey px-3 py-2 mb-2' : 'sent d-flex justify-content-end mb-2'} rounded ">
                       ${!received ? '<div class="rounded px-3 py-2">' : ''}
