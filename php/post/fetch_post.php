@@ -6,7 +6,7 @@ if(isset($_SESSION['sess_id']))
 	$data = array(array());
 	$a = scandir('post/');
 	$user_id = mysqli_real_escape_string($link, $_SESSION['sess_id']);
-	$query = "SELECT post.* ,users.name ,users.profile_picture
+	$query = "SELECT DISTINCT post.* ,users.name ,users.profile_picture
 	FROM post   
     INNER JOIN users
 	ON post.user_id = users.id

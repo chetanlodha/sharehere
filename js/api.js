@@ -1,7 +1,7 @@
 
 $("#createPost").on('submit', function (e) {
     e.preventDefault();
-    if (!$('#createPost textarea').val() && !$('#createPost input')[0].files.length){
+    if (!$('#createPost textarea').val() && !$('#createPost input')[0].files.length) {
         notyf.error("Cannot create empty post");
         return
     }
@@ -16,13 +16,11 @@ $("#createPost").on('submit', function (e) {
         processData: false,
         cache: false,
         success: function (data) {
-            notyf.success("Post created");
-            console.log(data);
             data = JSON.parse(data);
             console.log(data);
-            if (!data.hasOwnProperty('post_id'))
-                return
-            console.log('post');
+            if (data.media.hasOwnProperty('error'))
+                return notyf.error(data.media.error)
+            notyf.success("Post created");
             appendPost(data, 'home', 1);
             setUpPostActions('home');
             $('.post:first-child').addClass('animatePost shadow-light');
@@ -376,7 +374,7 @@ const removeFriend = (friend_id) => {
         dataType: "json",
         success: function (data) {
             $(`.chat-user[data-id=${$.escapeSelector(btoa(friend_id))}], .chat-window[data-id=${$.escapeSelector(btoa(friend_id))}]`).remove()
-            if(!$('.chat-user').length)
+            if (!$('.chat-user').length)
                 $('.chat-users, .chat-list').html('<p class="text-center animateGrow opacity-50 mt-2">No friends yet</p>')
             console.log(data);
         },
