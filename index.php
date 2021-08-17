@@ -61,7 +61,7 @@ if (!isset($_SESSION["sess_user"])) {
 
   <script>
     var currentUser = btoa('<?php echo $_SESSION['sess_id'] ?>');
-    let socket = io("http://localhost:3000");
+    let socket = io("https://sharehere-chat.herokuapp.com/");
     let notyf;
     socket.emit('newUser', currentUser);
   </script>
